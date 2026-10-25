@@ -131,7 +131,7 @@ fun SettingsAccount(
 
             Text(
                 text = user.email,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -149,7 +149,7 @@ fun SettingsAccount(
                     iconColor = MaterialTheme.colorScheme.onPrimary,
                     iconSize = AppDimens.Icon.Sm,
                     label = stringResource(R.string.label_personal_qr_code),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     labelColor = MaterialTheme.colorScheme.onPrimary,
                     onClick = onNavigateToQRCode
                 )
@@ -161,7 +161,7 @@ fun SettingsAccount(
                     iconColor = MaterialTheme.colorScheme.onPrimary,
                     iconSize = AppDimens.Icon.Sm,
                     label = stringResource(R.string.label_edit_profile),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     labelColor = MaterialTheme.colorScheme.onPrimary,
                     onClick = onNavigateToProfile
                 )

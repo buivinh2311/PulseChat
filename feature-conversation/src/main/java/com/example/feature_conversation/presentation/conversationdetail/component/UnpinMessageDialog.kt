@@ -27,7 +27,7 @@ fun UnpinMessageDialog(
                     R.string.text_unpin_message,
                     messagePreviewText(message)
                 ),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis
             )
@@ -41,7 +41,7 @@ fun UnpinMessageDialog(
             ) {
                 Text(
                     text = stringResource(R.string.label_unpin),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -52,7 +52,7 @@ fun UnpinMessageDialog(
             ) {
                 Text(
                     text = stringResource(R.string.label_cancel),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         }

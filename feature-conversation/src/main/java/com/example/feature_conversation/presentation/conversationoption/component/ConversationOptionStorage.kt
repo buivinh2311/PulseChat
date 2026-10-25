@@ -39,7 +39,7 @@ fun ConversationOptionStorage(
         ) {
             Text(
                 text = stringResource(R.string.title_storage),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.Space.Md)

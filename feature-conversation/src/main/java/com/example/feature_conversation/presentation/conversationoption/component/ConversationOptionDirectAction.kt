@@ -41,7 +41,7 @@ fun ConversationOptionDirectAction(
         ) {
             Text(
                 text = stringResource(R.string.title_action),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.Space.Md)

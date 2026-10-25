@@ -39,7 +39,7 @@ fun ConversationOptionGroupInfo(
         ) {
             Text(
                 text = stringResource(R.string.title_info),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.Space.Md)

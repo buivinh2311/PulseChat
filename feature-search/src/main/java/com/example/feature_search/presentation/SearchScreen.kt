@@ -162,7 +162,7 @@ fun SearchScreen (
 //                    ) {
 //                        Text(
 //                            text = stringResource(R.string.search_recently),
-//                            style = MaterialTheme.typography.titleLarge,
+//                            style = MaterialTheme.typography.titleMedium,
 //                            modifier = Modifier.weight(1f)
 //                        )
 //

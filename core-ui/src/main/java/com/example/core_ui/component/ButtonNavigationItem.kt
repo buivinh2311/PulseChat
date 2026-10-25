@@ -79,14 +79,14 @@ fun ButtonNavigateItem(
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = textColor ?: MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodySmall,
-                color = textColor ?: MaterialTheme.colorScheme.onSurface
+                color = textColor?.copy(alpha = 0.8f) ?: MaterialTheme.colorScheme.outline
             )
         }
 

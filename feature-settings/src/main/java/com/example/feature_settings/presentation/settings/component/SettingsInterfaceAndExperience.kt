@@ -46,7 +46,7 @@ fun SettingsInterfaceAndExperience(
         ) {
             Text(
                 text = stringResource(R.string.title_interface_and_experience),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.Space.Md)

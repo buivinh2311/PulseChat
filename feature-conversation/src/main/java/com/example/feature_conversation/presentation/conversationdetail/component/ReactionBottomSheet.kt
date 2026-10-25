@@ -127,7 +127,7 @@ fun ReactionUserItem(
         ) {
             Text(
                 text = user.fullName,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleMedium
             )
 
             if(user.id == currentUserId) {

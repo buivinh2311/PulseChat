@@ -73,7 +73,7 @@ fun ContactsFriendRequest(
             ) {
                 Text(
                     text = stringResource(R.string.title_friend_request),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(

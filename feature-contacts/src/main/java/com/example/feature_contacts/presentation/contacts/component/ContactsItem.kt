@@ -82,7 +82,7 @@ fun ContactsItem(
 //                            is ConversationDisplayInfo.Group -> displayInfo.group.name
 //                        },
                     text = "hus",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
 

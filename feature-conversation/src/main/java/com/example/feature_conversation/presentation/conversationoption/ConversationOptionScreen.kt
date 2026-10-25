@@ -109,12 +109,7 @@ fun ConversationOptionScreen(
                         .consumeWindowInsets(innerPadding)
                         .imePadding()
                         .fillMaxSize(),
-                    contentPadding = PaddingValues(
-                        start = AppDimens.Space.Md,
-                        end = AppDimens.Space.Md,
-                        top = AppDimens.Space.Sm,
-                        bottom = AppDimens.Space.Xl
-                    )
+                    contentPadding = PaddingValues(AppDimens.Space.Md)
                 ) {
                     item {
                         val conversationOptionUiState = state.data

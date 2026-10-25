@@ -18,7 +18,7 @@ fun DeleteConfirmDialog(
         title = {
             Text(
                 text = stringResource(R.string.delete_search_history_confirm),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
         },

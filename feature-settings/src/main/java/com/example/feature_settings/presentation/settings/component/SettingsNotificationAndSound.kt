@@ -44,7 +44,7 @@ fun SettingsNotificationAndSound(
         ) {
             Text(
                 text = stringResource(R.string.title_notification_and_sound),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = AppDimens.Space.Md)

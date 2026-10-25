@@ -73,7 +73,7 @@ fun ContactsFriendSuggest(
             ) {
                 Text(
                     text = stringResource(R.string.title_friend_suggest),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(

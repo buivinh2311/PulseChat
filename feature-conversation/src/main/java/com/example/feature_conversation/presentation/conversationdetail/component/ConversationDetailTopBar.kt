@@ -111,7 +111,7 @@ fun ConversationDetailTopBar(
         ) {
             Text(
                 text = name,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 overflow = TextOverflow.Ellipsis
             )
 

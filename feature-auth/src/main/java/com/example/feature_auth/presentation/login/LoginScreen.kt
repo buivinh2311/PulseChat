@@ -351,7 +351,7 @@ fun LoginScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.title_verify_email),
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 textAlign = TextAlign.Center
                             )

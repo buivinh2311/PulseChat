@@ -1,4 +1,4 @@
-package com.example.feature_friend_request
+package com.example.feature_contacts.friendrequest
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,6 @@ import com.example.core_resource.R
 import com.example.core_ui.component.AppBottomBar
 import com.example.core_ui.component.AppTopBar
 import com.example.core_ui.menu.AppBottomBarAction
-import com.example.share_presentation.FriendRequest
 
 @Composable
 fun FriendRequestScreen(

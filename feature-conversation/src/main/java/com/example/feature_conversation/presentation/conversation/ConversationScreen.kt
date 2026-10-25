@@ -168,7 +168,7 @@ fun ConversationScreen(
                         Spacer(modifier = Modifier.height(AppDimens.Space.Md))
                         Text(
                             text = stringResource(R.string.title_online),
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier
                                 .padding(horizontal = AppDimens.Space.Md)
                         )

@@ -89,7 +89,7 @@ fun ProfileAvatar(
             iconSize = AppDimens.Icon.Sm,
             label = stringResource(R.string.label_change_cover_photo),
             labelColor = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
             onClick = {
                 coverPhotoLauncher.launch(
                     PickVisualMediaRequest(
@@ -170,7 +170,7 @@ fun ProfileAvatar(
                     iconSize = AppDimens.Icon.Sm,
                     iconColor = MaterialTheme.colorScheme.primary,
                     label = stringResource(R.string.label_personal_qr_code),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     onClick = {
                         onNavigateToQRCode()
                     }

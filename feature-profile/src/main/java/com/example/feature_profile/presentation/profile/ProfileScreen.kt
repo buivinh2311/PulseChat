@@ -149,7 +149,7 @@ fun ProfileScreen(
 
                             Text(
                                 text = stringResource(R.string.editing),
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.weight(1f)
                             )
 
@@ -160,7 +160,7 @@ fun ProfileScreen(
                                 iconColor = MaterialTheme.colorScheme.onPrimary,
                                 iconSize = AppDimens.Icon.Sm,
                                 label = stringResource(R.string.label_save),
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 labelColor = MaterialTheme.colorScheme.onPrimary,
                                 onClick = {
                                     profileViewModel.updateProfile(
