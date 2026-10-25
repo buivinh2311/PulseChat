@@ -65,7 +65,7 @@ fun ConversationOptionItem(
 
             Text(
                 text = label,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

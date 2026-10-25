@@ -82,7 +82,7 @@ fun AppTopBar(
             Text(
                 text = title,
                 style = if (onBack == null) MaterialTheme.typography.headlineLarge
-                else MaterialTheme.typography.titleLarge,
+                else MaterialTheme.typography.titleMedium,
                 color = titleColor ?: MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.width(AppDimens.Space.Xs))

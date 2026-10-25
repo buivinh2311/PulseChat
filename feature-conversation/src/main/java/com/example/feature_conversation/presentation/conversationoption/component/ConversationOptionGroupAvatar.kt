@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -131,12 +132,27 @@ fun ConversationOptionGroupAvatar(
             }
             Spacer(modifier = Modifier.height(AppDimens.Space.Md))
 
-            Text(
-                text = group.name,
-                style = MaterialTheme.typography.headlineMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                modifier = Modifier.clickable {
+                    showChangeGroupNameDialog = true
+                },
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = group.name,
+                    style = MaterialTheme.typography.headlineMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.width(AppDimens.Space.Xs))
+
+                Icon(
+                    painter = AppIcons.Edit,
+                    contentDescription = "change group name",
+                    modifier = Modifier.size(AppDimens.Icon.Xxs)
+                )
+            }
             Spacer(modifier = Modifier.height(AppDimens.Space.Lg))
 
             Row(
@@ -180,6 +196,7 @@ fun ConversationOptionGroupAvatar(
 
     if (showChangeGroupNameDialog) {
         ChangeGroupNameDialog(
+            oldGroupName = group.name,
             onDismiss = {
                 showChangeGroupNameDialog = false
             },

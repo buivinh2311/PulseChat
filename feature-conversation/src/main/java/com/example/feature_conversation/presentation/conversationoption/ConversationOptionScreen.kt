@@ -151,7 +151,8 @@ fun ConversationOptionScreen(
                                         group = data.group,
                                         onChangeGroupAvatar = { },
                                         onChangeGroupName = { groupId, groupName ->
-
+                                            conversationOptionViewModel
+                                                .changeGroupName(groupId, groupName)
                                         }
                                     )
 
