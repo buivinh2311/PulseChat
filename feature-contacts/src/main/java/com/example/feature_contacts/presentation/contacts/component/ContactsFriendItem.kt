@@ -20,19 +20,18 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
+import com.example.core_model.User
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.AppIconButton
 
 @Composable
-fun ContactsItem(
+fun ContactsFriendItem(
     modifier: Modifier = Modifier,
-//    conversationWithInfo: ConversationWithInfo,
+    user: User,
     onClick: (String) -> Unit
 ) {
-//    val conversation = conversationWithInfo.conversation
-//    val displayInfo = conversationWithInfo.displayInfo
     Surface(
         modifier = modifier
             .height(AppDimens.Layout.ChatItemHeight)
@@ -42,7 +41,7 @@ fun ContactsItem(
                 shape = RoundedCornerShape(AppDimens.Space.Lg)
             ),
         onClick = {
-//            onClick(conversation.id)
+            onClick(user.id)
         },
         shape = RoundedCornerShape(AppDimens.Space.Lg),
         color = MaterialTheme.colorScheme.surfaceContainerLowest
@@ -55,51 +54,22 @@ fun ContactsItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-//                    model = when (displayInfo) {
-//                        is ConversationDisplayInfo.Direct -> displayInfo.otherUser.avatarUrl
-//                        is ConversationDisplayInfo.Group -> displayInfo.group.avatarUrl
-//                    },
-                model = "",
+                model = user.avatarUrl,
                 contentDescription = null,
                 placeholder = painterResource(R.drawable.account),
                 error = painterResource(R.drawable.account),
                 modifier = Modifier
-                    .size(AppDimens.ImageSize.Md)
+                    .size(AppDimens.ImageSize.Sm)
                     .clip(shape = CircleShape),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(AppDimens.Space.Md))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-//                        text = when (displayInfo) {
-//                            is ConversationDisplayInfo.Direct ->
-//                                displayInfo.otherUser.firstName + " " + displayInfo.otherUser.lastName
-//
-//                            is ConversationDisplayInfo.Group -> displayInfo.group.name
-//                        },
-                    text = "hus",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
-
-                AppIconButton(
-                    modifier = Modifier.padding(start = AppDimens.Space.Xl),
-                    icon = AppIcons.Call,
-                    iconSize = AppDimens.Icon.Sm,
-                    onClick = {}
-                )
-                Spacer(modifier = Modifier.width(AppDimens.Space.Lg))
-
-                AppIconButton(
-                    icon = AppIcons.Chat,
-                    iconSize = AppDimens.Icon.Sm,
-                    onClick = {}
-                )
-            }
+            Text(
+                text = user.fullName,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }

@@ -17,6 +17,7 @@ object AppRoute {
     const val FORWARD = "forward"
     const val FORWARD_WITH_ARG = "forward/{conversationId}/{messageId}"
     const val FRIEND_REQUEST = "friendRequest"
+    const val FRIEND_SENT = "friendSent"
     const val FRIEND_SUGGESTION = "friendSuggestion"
     const val LANGUAGE = "language"
     const val LOGIN = "login?showDialog={showDialog}"

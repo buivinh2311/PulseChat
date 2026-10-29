@@ -157,6 +157,7 @@ fun ProfileInfo(
                                 MaterialTheme.colorScheme.primary
                             else
                                 MaterialTheme.colorScheme.onSecondary,
+                            style = typography.titleMedium,
                             onClick = {
                                 onGenderSelected(gender)
                             }

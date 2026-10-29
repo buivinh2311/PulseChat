@@ -50,7 +50,7 @@ import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.AppIconButton
-import com.example.core_utils.uriToFile
+import com.example.core_utils.ImageUtil
 import com.example.feature_conversation.domain.model.ConversationDetailAction
 import com.example.feature_conversation.domain.model.FileInfo
 
@@ -74,7 +74,7 @@ fun ConversationDetailBottomBar(
             val mimeType = context.contentResolver.getType(uri)
                 ?: return@mapNotNull null
             FileInfo(
-                file = uriToFile(context, uri),
+                file = ImageUtil.uriToFile(context, uri),
                 mimeType = mimeType
             )
         }
@@ -90,7 +90,7 @@ fun ConversationDetailBottomBar(
             val mimeType = context.contentResolver.getType(uri)
                 ?: return@mapNotNull null
             FileInfo(
-                file = uriToFile(context, uri),
+                file = ImageUtil.uriToFile(context, uri),
                 mimeType = mimeType
             )
         }

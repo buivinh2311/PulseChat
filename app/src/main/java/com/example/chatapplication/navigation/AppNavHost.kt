@@ -24,11 +24,11 @@ import com.example.chatapplication.navigation.route.LoginRoute
 import com.example.chatapplication.navigation.route.ProfileRoute
 import com.example.chatapplication.navigation.route.RegisterRoute
 import com.example.chatapplication.navigation.route.SearchRoute
+import com.example.chatapplication.navigation.route.SentFriendRequestRoute
 import com.example.chatapplication.navigation.route.SettingsRoute
 import com.example.chatapplication.navigation.route.ViewMemberRoute
-import com.example.core_ui.menu.AppBottomBarAction
 import com.example.core_model.enum.SettingOptionAction
-import com.example.feature_conversation.presentation.forward.ForwardScreen
+import com.example.core_ui.menu.AppBottomBarAction
 
 @Composable
 fun AppNavHost(
@@ -196,15 +196,31 @@ fun AppNavHost(
 
         composable(route = AppRoute.CONTACTS) {
             ContactsRoute(
-                onSearchClick = onSearchClick,
-                onViewAllClick = onViewAllClick,
-                onViewMoreClick = onViewMoreClick,
+                onFriendRequest = {
+                    navController.navigate(AppRoute.FRIEND_REQUEST)
+                },
+                onFriendSent = {
+                    navController.navigate(AppRoute.FRIEND_SENT)
+                },
+                onFriendSuggestion = {
+                    navController.navigate(AppRoute.FRIEND_SUGGESTION)
+                },
+                onContact = { conversationId ->
+                    navController.navigate("${AppRoute.CONVERSATION_DETAIL}/$conversationId")
+                },
                 onBottomActionClick = onBottomActionClick
             )
         }
 
         composable(route = AppRoute.FRIEND_REQUEST) {
             FriendRequestRoute(
+                onBack = onBack,
+                onBottomActionClick = onBottomActionClick
+            )
+        }
+
+        composable(route = AppRoute.FRIEND_SENT) {
+            SentFriendRequestRoute(
                 onBack = onBack,
                 onBottomActionClick = onBottomActionClick
             )

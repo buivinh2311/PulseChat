@@ -87,7 +87,7 @@ fun AppSearchBar(
                     if (keyword.isEmpty()) {
                         Text(
                             text = stringResource(R.string.hint_query),
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSecondary.copy(
                                 alpha = 0.7f
                             )

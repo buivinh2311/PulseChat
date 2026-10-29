@@ -29,6 +29,7 @@ fun AppButton(
     containerColor: Color,
     label: String,
     labelColor: Color,
+    style: TextStyle,
     onClick: () -> Unit
 ) {
     Surface(
@@ -42,8 +43,9 @@ fun AppButton(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelLarge,
-                color = labelColor
+                style = style,
+                color = labelColor,
+                modifier = Modifier.padding(horizontal = AppDimens.Space.Md)
             )
         }
     }

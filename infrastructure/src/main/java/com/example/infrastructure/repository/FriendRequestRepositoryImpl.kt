@@ -107,6 +107,38 @@ class FriendRequestRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun observeFriendRequestsBySenderId(
+        senderId: String
+    ): Flow<List<FriendRequest>> = callbackFlow {
+        val listener = firestore
+            .collection(FRIEND_REQUESTS)
+            .whereEqualTo("senderId", senderId)
+            .whereEqualTo(
+                "status",
+                FriendRequestStatus.PENDING.name
+            )
+            .orderBy(
+                "createdAt",
+                Query.Direction.DESCENDING
+            )
+            .addSnapshotListener { snapshots, exception ->
+                if(exception != null) {
+                    close(exception)
+                    return@addSnapshotListener
+                }
+                val list = snapshots?.documents
+                    ?.mapNotNull {
+                        it.toObject(FriendRequestDto::class.java)
+                            ?.toDomain(it.id)
+                    }
+                    ?: emptyList()
+                trySend(list)
+            }
+        awaitClose {
+            listener.remove()
+        }
+    }
+
     override suspend fun rejectRequest(requestId: String): Result<Unit> {
         return try {
             firestore
@@ -135,15 +167,11 @@ class FriendRequestRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun recallRequest(
-        senderId: String,
-        receiverId: String
-    ): Result<Unit> {
+    override suspend fun recallRequest(request: FriendRequest): Result<Unit> {
         return try {
-            val requestId = buildFriendRequestId(senderId, receiverId)
             firestore
                 .collection(FRIEND_REQUESTS)
-                .document(requestId)
+                .document(request.id)
                 .delete()
                 .await()
             Result.success(Unit)

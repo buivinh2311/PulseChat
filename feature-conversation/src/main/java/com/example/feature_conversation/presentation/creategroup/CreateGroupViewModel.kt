@@ -1,12 +1,11 @@
 package com.example.feature_conversation.presentation.creategroup
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core_model.User
 import com.example.core_ui.state.UiState
 import com.example.feature_conversation.domain.usecase.CreateGroupUseCase
-import com.example.feature_conversation.domain.usecase.GetFriendsUseCase
+import com.example.core_domain.usecase.GetFriendsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

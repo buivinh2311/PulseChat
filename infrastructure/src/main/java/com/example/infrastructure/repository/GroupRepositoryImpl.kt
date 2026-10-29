@@ -69,6 +69,24 @@ class GroupRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getGroupsByConversationIds(
+        conversationIds: List<String>
+    ): Result<List<Group>> {
+        return try {
+            val groups = firestore
+                .collection(GROUPS)
+                .whereIn("conversationId", conversationIds)
+                .get()
+                .await()
+                .mapNotNull {
+                    it.toObject(GroupDto::class.java).toDomain()
+                }
+            Result.success(groups)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override fun observerGroupByConversationId(
         conversationId: String
     ): Flow<Group?> = callbackFlow {

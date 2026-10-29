@@ -6,15 +6,17 @@ import com.example.feature_contacts.presentation.contacts.ContactsScreen
 
 @Composable
 fun ContactsRoute(
-    onSearchClick: () -> Unit,
-    onViewAllClick: () -> Unit,
-    onViewMoreClick: () -> Unit,
+    onFriendRequest: () -> Unit,
+    onFriendSent: () -> Unit,
+    onFriendSuggestion: () -> Unit,
+    onContact: (String) -> Unit,
     onBottomActionClick: (AppBottomBarAction) -> Unit
 ) {
     ContactsScreen(
-        onSearchClick = onSearchClick,
-        onViewAllClick = onViewAllClick,
-        onViewMoreClick = onViewMoreClick,
+        onFriendRequest = onFriendRequest,
+        onFriendSent = onFriendSent,
+        onFriendSuggestion = onFriendSuggestion,
+        onContact = onContact,
         onBottomActionClick = onBottomActionClick
     )
 }

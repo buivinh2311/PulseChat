@@ -157,7 +157,7 @@ fun dimens(): Dimens {
             BottomBarHeight = (56 * scale).dp,
             SearchBarHeight = (48 * scale).dp,
             ChatItemHeight = (64 * scale).dp,
-            ButtonHeight = (56 * scale).dp,
+            ButtonHeight = (36 * scale).dp,
             StatusWidth = (80 * scale).dp,
             IconButtonSize = (36 * scale).dp,
             TextFieldHeight = (48 * scale).dp,

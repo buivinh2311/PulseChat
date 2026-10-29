@@ -38,7 +38,7 @@ import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.AppIconTextButton
-import com.example.core_utils.uriToFile
+import com.example.core_utils.ImageUtil
 import java.io.File
 
 @Composable
@@ -54,7 +54,7 @@ fun SettingsAccount(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            val file = uriToFile(context, uri)
+            val file = ImageUtil.uriToFile(context, uri)
             uploadAvatar(file)
         }
     }

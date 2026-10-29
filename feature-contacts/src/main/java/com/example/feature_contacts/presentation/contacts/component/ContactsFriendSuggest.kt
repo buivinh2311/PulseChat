@@ -28,7 +28,7 @@ import com.example.core_resource.R
 @Composable
 fun ContactsFriendSuggest(
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit
+    onFriendSuggestion: () -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -38,9 +38,7 @@ fun ContactsFriendSuggest(
                 elevation = AppDimens.Space.Es,
                 shape = RoundedCornerShape(AppDimens.Space.Lg)
             ),
-        onClick = {
-
-        },
+        onClick = onFriendSuggestion,
         shape = RoundedCornerShape(AppDimens.Space.Lg),
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
@@ -54,7 +52,7 @@ fun ContactsFriendSuggest(
         ) {
             Box(
                 modifier = Modifier
-                    .size(AppDimens.ImageSize.Md)
+                    .size(AppDimens.ImageSize.Sm)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.tertiaryContainer),
                 contentAlignment = Alignment.Center
@@ -63,7 +61,7 @@ fun ContactsFriendSuggest(
                     painter = AppIcons.Suggest,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                    modifier = Modifier.size(AppDimens.Icon.Md)
+                    modifier = Modifier.size(AppDimens.Icon.Sm)
                 )
             }
             Spacer(modifier = Modifier.width(AppDimens.Space.Md))
@@ -73,12 +71,13 @@ fun ContactsFriendSuggest(
             ) {
                 Text(
                     text = stringResource(R.string.title_friend_suggest),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
                     text = stringResource(R.string.text_friend_suggest),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 

@@ -3,7 +3,7 @@ package com.example.feature_conversation.presentation.viewmember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core_ui.state.UiState
-import com.example.feature_conversation.domain.usecase.GetCurrentUserUseCase
+import com.example.core_domain.usecase.GetCurrentUserUseCase
 import com.example.feature_conversation.domain.usecase.ObserveConversationByIdUseCase
 import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 import dagger.hilt.android.lifecycle.HiltViewModel

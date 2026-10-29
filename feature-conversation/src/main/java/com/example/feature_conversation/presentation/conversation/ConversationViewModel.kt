@@ -1,11 +1,9 @@
 package com.example.feature_conversation.presentation.conversation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core_domain.usecase.GetCurrentUserIdUseCase
 import com.example.core_ui.state.UiState
-import com.example.feature_conversation.domain.usecase.GetCurrentUserUseCase
 import com.example.feature_conversation.domain.usecase.ObserveConversationsWithInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

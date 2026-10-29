@@ -15,7 +15,6 @@ class ObserveFriendRequestsByReceiverIdUseCase @Inject constructor(
     private val friendRequestRepository: FriendRequestRepository,
     private val userRepository: UserRepository
 ) {
-
     operator fun invoke(): Flow<List<FriendRequestWithUser>> = flow{
         val uid = authRepository.getCurrentUserId()
             ?: throw IllegalStateException("User not logged in")

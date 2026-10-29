@@ -28,7 +28,7 @@ import com.example.core_resource.R
 @Composable
 fun ContactsFriendSent(
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit
+    onFriendSent: () -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -38,9 +38,7 @@ fun ContactsFriendSent(
                 elevation = AppDimens.Space.Es,
                 shape = RoundedCornerShape(AppDimens.Space.Lg)
             ),
-        onClick = {
-
-        },
+        onClick = onFriendSent,
         shape = RoundedCornerShape(AppDimens.Space.Lg),
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
@@ -54,7 +52,7 @@ fun ContactsFriendSent(
         ) {
             Box(
                 modifier = Modifier
-                    .size(AppDimens.ImageSize.Md)
+                    .size(AppDimens.ImageSize.Sm)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.secondaryContainer),
                 contentAlignment = Alignment.Center
@@ -63,7 +61,7 @@ fun ContactsFriendSent(
                     painter = AppIcons.PersonAdd,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.size(AppDimens.Icon.Md)
+                    modifier = Modifier.size(AppDimens.Icon.Sm)
                 )
             }
             Spacer(modifier = Modifier.width(AppDimens.Space.Md))
@@ -73,12 +71,13 @@ fun ContactsFriendSent(
             ) {
                 Text(
                     text = stringResource(R.string.title_friend_sent),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
                     text = stringResource(R.string.text_quantity_friend_sent),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 

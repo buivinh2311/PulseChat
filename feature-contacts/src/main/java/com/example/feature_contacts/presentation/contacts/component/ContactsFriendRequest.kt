@@ -28,7 +28,7 @@ import com.example.core_resource.R
 @Composable
 fun ContactsFriendRequest(
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit
+    onFriendRequest: () -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -38,9 +38,7 @@ fun ContactsFriendRequest(
                 elevation = AppDimens.Space.Es,
                 shape = RoundedCornerShape(AppDimens.Space.Lg)
             ),
-        onClick = {
-
-        },
+        onClick = onFriendRequest,
         shape = RoundedCornerShape(AppDimens.Space.Lg),
         color = MaterialTheme.colorScheme.surfaceContainerLowest
     ) {
@@ -54,7 +52,7 @@ fun ContactsFriendRequest(
         ) {
             Box(
                 modifier = Modifier
-                    .size(AppDimens.ImageSize.Md)
+                    .size(AppDimens.ImageSize.Sm)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
@@ -66,19 +64,20 @@ fun ContactsFriendRequest(
                     modifier = Modifier.size(AppDimens.Icon.Md)
                 )
             }
-            Spacer(modifier = Modifier.width(AppDimens.Space.Md))
+            Spacer(modifier = Modifier.width(AppDimens.Space.Sm))
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = stringResource(R.string.title_friend_request),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Text(
                     text = stringResource(R.string.text_quantity_friend_request),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 

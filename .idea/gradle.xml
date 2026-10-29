@@ -19,8 +19,6 @@
             <option value="$PROJECT_DIR$/feature-auth" />
             <option value="$PROJECT_DIR$/feature-contacts" />
             <option value="$PROJECT_DIR$/feature-conversation" />
-            <option value="$PROJECT_DIR$/feature-friend-request" />
-            <option value="$PROJECT_DIR$/feature-friend-suggestion" />
             <option value="$PROJECT_DIR$/feature-profile" />
             <option value="$PROJECT_DIR$/feature-search" />
             <option value="$PROJECT_DIR$/feature-settings" />

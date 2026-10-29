@@ -29,7 +29,7 @@ import com.example.core_ui.component.ErrorScreen
 import com.example.core_ui.component.LoadingScreen
 import com.example.core_ui.component.showToast
 import com.example.core_ui.state.UiState
-import com.example.core_utils.uriToFile
+import com.example.core_utils.ImageUtil
 import com.example.feature_conversation.presentation.creategroup.component.CreateGroupInfo
 import com.example.feature_conversation.presentation.creategroup.component.CreateGroupMemberBottomBar
 import com.example.share_presentation.PickContactItem
@@ -164,7 +164,7 @@ fun CreateGroupScreen(
                         }
                     }
 
-                    if(groupMember.isNotEmpty()) {
+                    if (groupMember.isNotEmpty()) {
                         CreateGroupMemberBottomBar(
                             groupMember = groupMember,
                             onRemoveMember = { member ->
@@ -173,7 +173,9 @@ fun CreateGroupScreen(
                             onCreateGroup = {
                                 createGroupViewModel.createGroup(
                                     name = groupName,
-                                    avatar = selectedAvatarUri?.let { uriToFile(context, it) },
+                                    avatar = selectedAvatarUri?.let {
+                                        ImageUtil.uriToFile(context, it)
+                                    },
                                     otherUser = groupMember
                                 )
                             }

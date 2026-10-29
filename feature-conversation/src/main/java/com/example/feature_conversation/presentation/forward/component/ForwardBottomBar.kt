@@ -51,7 +51,7 @@ import com.example.core_model.composite.ConversationWithInfo
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
-import com.example.core_utils.formatFileSize
+import com.example.core_utils.FileUtil
 import com.example.feature_conversation.presentation.conversationdetail.component.formatDuration
 import com.example.feature_conversation.presentation.conversationdetail.component.getFileImage
 import kotlin.text.isEmpty
@@ -275,7 +275,7 @@ fun ForwardBottomBar(
                                 )
 
                                 Text(
-                                    text = formatFileSize(message.fileSize),
+                                    text = FileUtil.formatFileSize(message.fileSize),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.outlineVariant
                                 )

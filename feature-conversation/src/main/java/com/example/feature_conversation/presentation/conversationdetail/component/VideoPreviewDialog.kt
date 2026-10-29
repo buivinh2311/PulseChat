@@ -72,9 +72,8 @@ import com.example.core_model.composite.MediaPreview
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
+import com.example.core_utils.SystemBarsUtil
 import com.example.core_utils.getReactionCount
-import com.example.core_utils.hideSystemBars
-import com.example.core_utils.showSystemBars
 import com.example.core_utils.toRelativeString
 import com.example.feature_conversation.domain.model.ConversationDetailAction
 import kotlinx.coroutines.delay
@@ -136,12 +135,12 @@ fun VideoPreviewDialog (
         DisposableEffect(window) {
             if (window != null) {
                 WindowCompat.setDecorFitsSystemWindows(window, false)
-                hideSystemBars(window)
+                SystemBarsUtil.hideSystemBars(window)
             }
 
             onDispose {
                 if (window != null) {
-                    showSystemBars(window)
+                    SystemBarsUtil.showSystemBars(window)
                 }
             }
         }
@@ -183,9 +182,9 @@ fun VideoPreviewDialog (
                                 isVisible = !isVisible
                                 window?.let {
                                     if (isVisible) {
-                                        showSystemBars(it)
+                                        SystemBarsUtil.showSystemBars(it)
                                     } else {
-                                        hideSystemBars(it)
+                                        SystemBarsUtil.hideSystemBars(it)
                                     }
                                 }
                             }

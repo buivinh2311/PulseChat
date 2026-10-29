@@ -11,6 +11,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -25,7 +26,7 @@ class ConversationRepositoryImpl @Inject constructor(
         const val CONVERSATIONS = "conversations"
     }
 
-    fun buildConversationId(
+    private fun buildConversationId(
         user1: String,
         user2: String
     ): String {
@@ -96,6 +97,24 @@ class ConversationRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getConversationGroupsByUserId(
+        userId: String
+    ): Result<List<Conversation>> {
+        return try {
+            val conversations = firestore.collection(CONVERSATIONS)
+                .whereEqualTo("type", "GROUP")
+                .whereArrayContains("participants", userId)
+                .get()
+                .await()
+                .mapNotNull {
+                    it.toObject(ConversationDto::class.java).toDomain()
+                }
+            Result.success(conversations)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun ensureConversation(
         user1: FirebaseUser,
         user2: User
@@ -162,5 +181,12 @@ class ConversationRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override fun getConversationIdByFriendship(
+        currentUserId: String,
+        friendId: String
+    ): String {
+        return buildConversationId(currentUserId, friendId)
     }
 }

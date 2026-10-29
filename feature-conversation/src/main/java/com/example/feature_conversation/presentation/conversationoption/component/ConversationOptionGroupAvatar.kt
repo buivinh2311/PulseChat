@@ -42,7 +42,7 @@ import com.example.core_model.Group
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
-import com.example.core_utils.uriToFile
+import com.example.core_utils.ImageUtil
 import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 import java.io.File
 
@@ -62,7 +62,7 @@ fun ConversationOptionGroupAvatar(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            val file = uriToFile(context, uri)
+            val file = ImageUtil.uriToFile(context, uri)
             onChangeGroupAvatar(file)
         }
     }

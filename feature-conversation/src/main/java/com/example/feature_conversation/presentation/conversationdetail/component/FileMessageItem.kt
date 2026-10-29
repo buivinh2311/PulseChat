@@ -38,7 +38,7 @@ import com.example.core_model.Message
 import com.example.core_model.User
 import com.example.core_resource.AppDimens
 import com.example.core_resource.R
-import com.example.core_utils.formatFileSize
+import com.example.core_utils.FileUtil
 import com.example.core_utils.getReactionCount
 
 @Composable
@@ -230,7 +230,7 @@ fun FileMessageItem(
                             Spacer(modifier = Modifier.height(AppDimens.Space.Xxs))
 
                             Text(
-                                text = formatFileSize(fileMessage.fileSize),
+                                text = FileUtil.formatFileSize(fileMessage.fileSize),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )

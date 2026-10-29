@@ -1,9 +1,9 @@
 package com.example.feature_conversation.presentation.conversationdetail
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core_model.FriendRequest
 import com.example.core_model.ReplyPreview
 import com.example.core_model.User
 import com.example.core_ui.state.UiState
@@ -12,7 +12,7 @@ import com.example.feature_conversation.domain.usecase.DownloadFileUseCase
 import com.example.feature_conversation.domain.usecase.DownloadImageUseCase
 import com.example.feature_conversation.domain.usecase.DownloadVideoUseCase
 import com.example.feature_conversation.domain.usecase.GetConversationByIdUseCase
-import com.example.feature_conversation.domain.usecase.GetCurrentUserUseCase
+import com.example.core_domain.usecase.GetCurrentUserUseCase
 import com.example.feature_conversation.domain.usecase.LoadMoreMessagesUseCase
 import com.example.feature_conversation.domain.usecase.MarkMessageAsReadUseCase
 import com.example.feature_conversation.domain.usecase.ObserveFriendRequestUseCase
@@ -165,9 +165,9 @@ class ConversationDetailViewModel @Inject constructor(
         }
     }
 
-    fun recallFriendRequest(receiverId: String) {
+    fun recallFriendRequest(request: FriendRequest) {
         viewModelScope.launch {
-            recallFriendRequestUseCase(receiverId)
+            recallFriendRequestUseCase(request)
                 .onFailure {
                     _event.emit(ConversationDetailEvent.ShowError)
                 }

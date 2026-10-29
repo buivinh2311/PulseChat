@@ -243,4 +243,6 @@
     <string name="text_view">Xem</string>
     <string name="text_unpin_message">Bỏ ghim tin nhắn \"%s\"?</string>
     <string name="title_change_group_name">Đổi tên nhóm</string>
+    <string name="label_refuse">Từ chối</string>
+    <string name="label_add_friend">Thêm bạn bè</string>
 </resources>

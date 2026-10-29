@@ -50,8 +50,6 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":feature-conversation"))
     implementation(project(":feature-contacts"))
-    implementation(project(":feature-friend-request"))
-    implementation(project(":feature-friend-suggestion"))
     implementation(project(":feature-auth"))
     implementation(project(":feature-profile"))
     implementation(project(":feature-search"))

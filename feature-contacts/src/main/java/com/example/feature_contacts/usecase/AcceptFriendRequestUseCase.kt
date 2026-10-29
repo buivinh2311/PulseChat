@@ -12,7 +12,9 @@ class AcceptFriendRequestUseCase @Inject constructor(
     private val friendshipRepository: FriendshipRepository,
     private val friendRequestRepository: FriendRequestRepository
 ) {
-    suspend operator fun invoke(request: FriendRequest) {
+    suspend operator fun invoke(
+        request: FriendRequest
+    ): Result<Unit> = runCatching {
         firestore.runTransaction { transaction ->
             friendshipRepository.createFriendship(
                 transaction,

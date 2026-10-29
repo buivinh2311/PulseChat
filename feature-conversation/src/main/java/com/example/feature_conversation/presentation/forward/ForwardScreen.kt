@@ -58,7 +58,6 @@ import com.example.core_ui.component.ErrorScreen
 import com.example.core_ui.component.LoadingScreen
 import com.example.core_ui.component.showToast
 import com.example.core_ui.state.UiState
-import com.example.core_utils.uriToFile
 import com.example.feature_conversation.presentation.creategroup.component.CreateGroupInfo
 import com.example.feature_conversation.presentation.creategroup.component.CreateGroupMemberBottomBar
 import com.example.feature_conversation.presentation.forward.component.ForwardBottomBar

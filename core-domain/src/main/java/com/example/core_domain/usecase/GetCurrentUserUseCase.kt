@@ -1,4 +1,4 @@
-package com.example.feature_conversation.domain.usecase
+package com.example.core_domain.usecase
 
 import com.example.core_domain.repository.AuthRepository
 import com.example.core_domain.repository.UserRepository
