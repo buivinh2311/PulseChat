@@ -1,4 +1,4 @@
-package com.example.infrastructure.di.group
+package com.example.infrastructure.di
 
 import com.example.core_domain.repository.GroupRepository
 import com.example.infrastructure.repository.GroupRepositoryImpl

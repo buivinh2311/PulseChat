@@ -41,6 +41,8 @@ okhttp = "5.1.0"
 cloudinary = "3.1.2"
 roomKtx = "2.8.5"
 camera = "1.5.1"
+lifecycle = "2.9.4"
+kotlinx-coroutines-play-services = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +65,8 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewModel" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines-play-services" }
 
 #firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
@@ -71,6 +75,7 @@ firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
 
 #Image
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }

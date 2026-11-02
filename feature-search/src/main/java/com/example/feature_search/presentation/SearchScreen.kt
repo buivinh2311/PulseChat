@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.core_model.enum.UserStatus
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
@@ -143,7 +144,7 @@ fun SearchScreen (
                                 id = user.id,
                                 name = user.fullName,
                                 avatarUrl = user.avatarUrl,
-                                status = user.status,
+                                status = UserStatus.ONLINE,
                                 onClick = {
                                     keyboardController?.hide()
                                     searchViewModel.openDirectConversation(user.id)

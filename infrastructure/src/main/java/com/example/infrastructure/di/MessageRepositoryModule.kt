@@ -1,4 +1,4 @@
-package com.example.infrastructure.di.message
+package com.example.infrastructure.di
 
 import com.example.core_domain.repository.MessageRepository
 import com.example.infrastructure.repository.MessageRepositoryImpl

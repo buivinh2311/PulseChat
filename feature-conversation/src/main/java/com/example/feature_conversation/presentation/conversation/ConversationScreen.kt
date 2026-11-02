@@ -2,6 +2,7 @@ package com.example.feature_conversation.presentation.conversation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.example.core_model.composite.ConversationDisplayInfo
 import com.example.core_resource.AppDimens
 import com.example.core_resource.R
 import com.example.core_ui.component.AppBottomBar
@@ -88,7 +90,7 @@ fun ConversationScreen(
 
             is UiState.Success -> {
                 val data = state.data
-                val conversations = data.conversationWithInfos
+                val conversationWithInfos = data.conversationWithInfos
                 LazyColumn(
                     modifier = Modifier.padding(innerPadding),
                     contentPadding = PaddingValues(
@@ -166,14 +168,6 @@ fun ConversationScreen(
 
                     item {
                         Spacer(modifier = Modifier.height(AppDimens.Space.Md))
-                        Text(
-                            text = stringResource(R.string.title_online),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier
-                                .padding(horizontal = AppDimens.Space.Md)
-                        )
-                        Spacer(modifier = Modifier.height(AppDimens.Space.Sm))
-
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(AppDimens.Space.Sm),
@@ -182,63 +176,87 @@ fun ConversationScreen(
                             )
                         ) {
                             items(
-                                count = 12
-                            ) {
-                                Column(
-                                    modifier = Modifier.width(AppDimens.Layout.StatusWidth),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Box {
-                                        AsyncImage(
-                                            model = "",
-                                            contentDescription = null,
-                                            placeholder = painterResource(R.drawable.account),
-                                            error = painterResource(R.drawable.account),
-                                            modifier = Modifier
-                                                .size(AppDimens.ImageSize.Xl)
-                                                .clip(shape = CircleShape)
-                                                .border(
-                                                    width = AppDimens.Space.Xxs,
-                                                    shape = CircleShape,
-                                                    color = MaterialTheme.colorScheme.primary
-                                                ),
-                                            contentScale = ContentScale.Crop
-                                        )
-
+                                count = conversationWithInfos.size,
+                                key = { index -> conversationWithInfos[index].conversation.id }
+                            ) { index ->
+                                val conversationWithInfo = conversationWithInfos[index]
+                                val displayInfo = conversationWithInfo.displayInfo
+                                if(conversationWithInfo.isOnline) {
+                                    Column(
+                                        modifier = Modifier.width(AppDimens.Layout.StatusWidth),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
                                         Box(
-                                            modifier = Modifier
-                                                .align(alignment = Alignment.BottomEnd)
-                                                .size(AppDimens.Icon.Xxs)
-                                                .clip(shape = CircleShape)
-                                                .background(color = Color(0xFF31A24C))
-                                                .border(
-                                                    width = AppDimens.Border.Thick,
-                                                    color = MaterialTheme.colorScheme.background,
-                                                    shape = CircleShape
+                                            modifier = Modifier.clickable {
+                                                onNavigationToConversationDetail(
+                                                    conversationWithInfo.conversation.id
                                                 )
+                                            }
+                                        ) {
+                                            AsyncImage(
+                                                model = when (displayInfo) {
+                                                    is ConversationDisplayInfo.Direct
+                                                        -> displayInfo.otherUser.avatarUrl
+
+                                                    is ConversationDisplayInfo.Group
+                                                        -> displayInfo.group.avatarUrl
+                                                },
+                                                contentDescription = null,
+                                                placeholder = painterResource(R.drawable.account),
+                                                error = painterResource(R.drawable.account),
+                                                modifier = Modifier
+                                                    .size(AppDimens.ImageSize.Xl)
+                                                    .clip(shape = CircleShape)
+                                                    .border(
+                                                        width = AppDimens.Space.Xxs,
+                                                        shape = CircleShape,
+                                                        color = MaterialTheme.colorScheme.primary
+                                                    ),
+                                                contentScale = ContentScale.Crop
+                                            )
+
+                                            Box(
+                                                modifier = Modifier
+                                                    .align(alignment = Alignment.BottomEnd)
+                                                    .size(AppDimens.Icon.Xxs)
+                                                    .clip(shape = CircleShape)
+                                                    .background(color = Color(0xFF31A24C))
+                                                    .border(
+                                                        width = AppDimens.Border.Thick - AppDimens.Border.Normal,
+                                                        color = MaterialTheme.colorScheme.background,
+                                                        shape = CircleShape
+                                                    )
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(AppDimens.Space.Sm))
+
+                                        Text(
+                                            text = when (displayInfo) {
+                                                is ConversationDisplayInfo.Direct
+                                                    -> displayInfo.otherUser
+                                                    .fullName.split(" ").last()
+
+                                                is ConversationDisplayInfo.Group
+                                                    -> displayInfo.group.name
+                                            },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     }
-                                    Spacer(modifier = Modifier.height(AppDimens.Space.Sm))
-
-                                    Text(
-                                        text = "name",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(AppDimens.Space.Lg))
+                        Spacer(modifier = Modifier.height(AppDimens.Space.Md))
                     }
 
                     items(
-                        count = conversations.size,
-                        key = { index -> conversations[index].conversation.id }
+                        count = conversationWithInfos.size,
+                        key = { index -> conversationWithInfos[index].conversation.id }
                     ) { index ->
                         ConversationItem(
                             currentUserId = data.currentUserId,
-                            conversationWithInfo = conversations[index],
+                            conversationWithInfo = conversationWithInfos[index],
                             onClick = { conversationId ->
                                 onNavigationToConversationDetail(conversationId)
                             }

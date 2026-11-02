@@ -59,6 +59,8 @@ dependencies {
 
     implementation(libs.navigation)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     //firebase
     implementation(platform(libs.firebase.bom))

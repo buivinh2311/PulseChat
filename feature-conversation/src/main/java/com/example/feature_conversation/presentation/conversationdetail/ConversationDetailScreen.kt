@@ -367,20 +367,7 @@ fun ConversationDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     ConversationDetailTopBar(
-                        imageUrl = when (conversationDetailData) {
-                            is ConversationDetailData.Direct
-                                -> conversationDetailData.user.avatarUrl
-
-                            is ConversationDetailData.Group
-                                -> conversationDetailData.group.avatarUrl
-                        },
-                        name = when (conversationDetailData) {
-                            is ConversationDetailData.Direct
-                                -> conversationDetailData.user.fullName
-
-                            is ConversationDetailData.Group
-                                -> conversationDetailData.group.name
-                        },
+                        conversationDetailUiState = conversationDetailUiState,
                         onBack = onBack,
                         onOption = {
                             onOption(conversationId)

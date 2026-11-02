@@ -1,4 +1,4 @@
-package com.example.feature_contacts.usecase
+package com.example.feature_contacts.domain.usecase
 
 import com.example.core_domain.repository.FriendshipRepository
 import com.example.core_domain.repository.FriendRequestRepository

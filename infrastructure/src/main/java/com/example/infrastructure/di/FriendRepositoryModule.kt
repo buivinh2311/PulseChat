@@ -1,4 +1,4 @@
-package com.example.infrastructure.di.friend
+package com.example.infrastructure.di
 
 import com.example.core_domain.repository.FriendshipRepository
 import com.example.infrastructure.repository.FriendshipRepositoryImpl

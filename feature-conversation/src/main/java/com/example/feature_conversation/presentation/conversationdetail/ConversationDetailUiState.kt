@@ -9,5 +9,7 @@ data class ConversationDetailUiState(
     val isConnected: Boolean,
     val isSentRequest: Boolean,
     val messages: List<Message>,
-    val pinnedMessages: List<Message>
+    val pinnedMessages: List<Message>,
+    val isOnline: Boolean,
+    val lastSeen: Long? = null
 )

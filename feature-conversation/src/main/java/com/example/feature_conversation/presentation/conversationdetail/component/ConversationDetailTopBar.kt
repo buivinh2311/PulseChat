@@ -38,15 +38,18 @@ import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.AppIconButton
+import com.example.core_utils.TimeUntil
+import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
+import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailUiState
 
 @Composable
 fun ConversationDetailTopBar(
     modifier: Modifier = Modifier,
-    imageUrl: String?,
-    name: String,
+    conversationDetailUiState: ConversationDetailUiState,
     onBack: () -> Unit,
     onOption: () -> Unit
 ) {
+    val conversationDetailData = conversationDetailUiState.conversationDetailData
     val gradientColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
     val strokeWidth = AppDimens.Divider.Normal
 
@@ -81,7 +84,13 @@ fun ConversationDetailTopBar(
 
         Box {
             AsyncImage(
-                model = imageUrl,
+                model = when (conversationDetailData) {
+                    is ConversationDetailData.Direct
+                        -> conversationDetailData.user.avatarUrl
+
+                    is ConversationDetailData.Group
+                        -> conversationDetailData.group.avatarUrl
+                },
                 contentDescription = null,
                 placeholder = painterResource(R.drawable.account),
                 error = painterResource(R.drawable.account),
@@ -91,18 +100,20 @@ fun ConversationDetailTopBar(
                 contentScale = ContentScale.Crop
             )
 
-            Box(
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomEnd)
-                    .size(12.dp)
-                    .clip(shape = CircleShape)
-                    .background(color = Color(0xFF31A24C))
-                    .border(
-                        width = AppDimens.Border.Normal,
-                        color = MaterialTheme.colorScheme.background,
-                        shape = CircleShape
-                    )
-            )
+            if (conversationDetailUiState.isOnline) {
+                Box(
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomEnd)
+                        .size(AppDimens.ImageSize.Es)
+                        .clip(shape = CircleShape)
+                        .background(color = Color(0xFF31A24C))
+                        .border(
+                            width = AppDimens.Border.Normal,
+                            color = MaterialTheme.colorScheme.background,
+                            shape = CircleShape
+                        )
+                )
+            }
         }
         Spacer(modifier = Modifier.width(AppDimens.Space.Md))
 
@@ -110,31 +121,42 @@ fun ConversationDetailTopBar(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = name,
+                text = when (conversationDetailData) {
+                    is ConversationDetailData.Direct
+                        -> conversationDetailData.user.fullName
+
+                    is ConversationDetailData.Group
+                        -> conversationDetailData.group.name
+                },
                 style = MaterialTheme.typography.titleMedium,
                 overflow = TextOverflow.Ellipsis
             )
 
-//            Text(
-//                text = "last online",
-//                style = MaterialTheme.typography.bodyMedium
-//            )
+            if (conversationDetailData is ConversationDetailData.Direct
+                && conversationDetailUiState.lastSeen != null
+            ) {
+                Text(
+                    text = TimeUntil.formatLastSeen(conversationDetailUiState.lastSeen),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
         }
-        Spacer(modifier = Modifier.width(AppDimens.Space.Lg))
+        Spacer(modifier = Modifier.width(AppDimens.Space.Md))
 
         AppIconButton(
             icon = AppIcons.Call,
             color = MaterialTheme.colorScheme.onSecondary,
             onClick = { }
         )
-        Spacer(modifier = Modifier.width(AppDimens.Space.Lg))
+        Spacer(modifier = Modifier.width(AppDimens.Space.Md))
 
         AppIconButton(
             icon = AppIcons.VideoCall,
             color = MaterialTheme.colorScheme.onSecondary,
             onClick = { }
         )
-        Spacer(modifier = Modifier.width(AppDimens.Space.Lg))
+        Spacer(modifier = Modifier.width(AppDimens.Space.Md))
 
         AppIconButton(
             icon = AppIcons.Option,

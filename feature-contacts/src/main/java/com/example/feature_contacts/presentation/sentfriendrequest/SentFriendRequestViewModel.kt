@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core_model.FriendRequest
 import com.example.core_ui.state.UiState
-import com.example.feature_contacts.usecase.ObserveFriendRequestsBySenderIdUseCase
-import com.example.feature_contacts.usecase.RecallFriendRequestUseCase
+import com.example.feature_contacts.domain.usecase.ObserveFriendRequestsBySenderIdUseCase
+import com.example.feature_contacts.domain.usecase.RecallFriendRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

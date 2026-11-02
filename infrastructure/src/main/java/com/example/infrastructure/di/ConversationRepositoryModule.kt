@@ -1,4 +1,4 @@
-package com.example.infrastructure.di.conversation
+package com.example.infrastructure.di
 
 import com.example.core_domain.repository.ConversationRepository
 import com.example.infrastructure.repository.ConversationRepositoryImpl

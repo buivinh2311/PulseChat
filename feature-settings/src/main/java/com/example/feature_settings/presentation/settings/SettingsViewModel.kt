@@ -6,7 +6,6 @@ import com.example.core_domain.usecase.ObserverUserUseCase
 import com.example.core_domain.usecase.UploadAvatarUseCase
 import com.example.core_model.enum.DarkModeState
 import com.example.core_ui.state.UiState
-import com.example.feature_settings.presentation.settings.SettingsEvent
 import com.example.feature_settings.usecase.GetThemeModeUseCase
 import com.example.feature_settings.usecase.LogoutUseCase
 import com.example.feature_settings.usecase.SetThemeModeUseCase
@@ -74,6 +73,8 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun logout() {
-        logoutUseCase()
+        viewModelScope.launch {
+            logoutUseCase()
+        }
     }
 }

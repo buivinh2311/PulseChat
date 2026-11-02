@@ -26,7 +26,6 @@ class RegisterUseCase @Inject constructor(
                         id = result.user.uid,
                         email = result.user.email.orEmpty(),
                         fullName = fullName,
-                        status = UserStatus.ONLINE,
                         createdAt = Timestamp.now()
                     )
                     userRepository.createUser(user)

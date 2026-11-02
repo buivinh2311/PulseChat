@@ -13,10 +13,14 @@ import com.example.feature_conversation.domain.usecase.DownloadImageUseCase
 import com.example.feature_conversation.domain.usecase.DownloadVideoUseCase
 import com.example.feature_conversation.domain.usecase.GetConversationByIdUseCase
 import com.example.core_domain.usecase.GetCurrentUserUseCase
+import com.example.core_domain.usecase.ObserveOnlineStatusUseCase
+import com.example.core_model.composite.ConversationDisplayInfo
+import com.example.core_model.composite.ConversationWithInfo
 import com.example.feature_conversation.domain.usecase.LoadMoreMessagesUseCase
 import com.example.feature_conversation.domain.usecase.MarkMessageAsReadUseCase
 import com.example.feature_conversation.domain.usecase.ObserveFriendRequestUseCase
 import com.example.feature_conversation.domain.usecase.ObserveFriendshipUseCase
+import com.example.feature_conversation.domain.usecase.ObserveLastSeenUseCase
 import com.example.feature_conversation.domain.usecase.ObserveMessagesByConversationIdUseCase
 import com.example.feature_conversation.domain.usecase.ObservePinnedMessageUseCase
 import com.example.feature_conversation.domain.usecase.OpenFileUseCase
@@ -33,12 +37,15 @@ import com.example.feature_conversation.domain.usecase.SendVideoMessageUseCase
 import com.example.feature_conversation.domain.usecase.UnpinMessageUseCase
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.onFailure
@@ -67,7 +74,9 @@ class ConversationDetailViewModel @Inject constructor(
     private val replyMessageUseCase: ReplyMessageUseCase,
     private val pinMessageUseCase: PinMessageUseCase,
     private val observePinnedMessageUseCase: ObservePinnedMessageUseCase,
-    private val unpinMessageUseCase: UnpinMessageUseCase
+    private val unpinMessageUseCase: UnpinMessageUseCase,
+    private val observeOnlineStatusUseCase: ObserveOnlineStatusUseCase,
+    private val observeLastSeenUseCase: ObserveLastSeenUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState<ConversationDetailUiState>>(
         UiState.Loading
@@ -106,19 +115,30 @@ class ConversationDetailViewModel @Inject constructor(
         data: ConversationDetailData.Direct,
         currentUser: User
     ) {
+        val friendId = data.user.id
+        val presenceFlow = combine(
+            observeOnlineStatusUseCase(friendId),
+            observeLastSeenUseCase(friendId)
+        ) { isOnline, lastSeen ->
+            isOnline to lastSeen
+        }
+
         combine(
-            observeFriendshipUseCase(data.user.id),
-            observeFriendRequestUseCase(data.user.id),
+            observeFriendshipUseCase(friendId),
+            observeFriendRequestUseCase(friendId),
             observeMessagesByConversationIdUseCase(data.conversation.id),
-            observePinnedMessageUseCase(data.conversation.id)
-        ) { isFriend, isSentRequest, messages, pinnedMessages ->
+            observePinnedMessageUseCase(data.conversation.id),
+            presenceFlow
+        ) { isFriend, isSentRequest, messages, pinnedMessages, presence->
             ConversationDetailUiState(
                 conversationDetailData = data,
                 currentUser = currentUser,
                 isConnected = isFriend,
                 isSentRequest = isSentRequest,
                 messages = messages,
-                pinnedMessages = pinnedMessages
+                pinnedMessages = pinnedMessages,
+                isOnline = presence.first,
+                lastSeen = presence.second
             )
         }
             .catch {
@@ -133,19 +153,30 @@ class ConversationDetailViewModel @Inject constructor(
         data: ConversationDetailData.Group,
         currentUser: User
     ) {
+        val memberIds = data.conversation.participants
+            .filterNot { it == currentUser.id }
+
+        val onlineStatusFlows = memberIds.map { userId ->
+            observeOnlineStatusUseCase(userId)
+        }
+
         combine(
 //            observeFriendshipUseCase(data.group.id),
 //            observeFriendRequestUseCase(data.group.id),
             observeMessagesByConversationIdUseCase(data.conversation.id),
-            observePinnedMessageUseCase(data.conversation.id)
-        ) { messages, pinnedMessages ->
+            observePinnedMessageUseCase(data.conversation.id),
+            combine(onlineStatusFlows) { statuses ->
+                statuses.any { it }
+            }
+        ) { messages, pinnedMessages, isOnline ->
             ConversationDetailUiState(
                 conversationDetailData = data,
                 currentUser = currentUser,
                 isConnected = false,
                 isSentRequest = false,
                 messages = messages,
-                pinnedMessages = pinnedMessages
+                pinnedMessages = pinnedMessages,
+                isOnline = isOnline
             )
         }
             .catch {

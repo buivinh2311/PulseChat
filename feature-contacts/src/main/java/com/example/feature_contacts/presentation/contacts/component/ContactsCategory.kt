@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.core_resource.AppDimens
 import com.example.core_resource.R
-import com.example.feature_contacts.presentation.contacts.ContactsCategory
+import com.example.feature_contacts.domain.model.ContactsCategory
 
 @Composable
 fun ContactsCategory(

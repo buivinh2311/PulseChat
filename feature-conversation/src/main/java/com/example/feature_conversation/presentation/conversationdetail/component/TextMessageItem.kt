@@ -359,8 +359,6 @@ fun TextMessageItem(
         }
     }
 
-
-
     if (reactionCounts.isNotEmpty()) {
         Spacer(
             modifier = Modifier.height(AppDimens.Space.Lg)

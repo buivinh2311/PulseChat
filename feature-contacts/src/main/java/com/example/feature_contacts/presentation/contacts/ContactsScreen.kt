@@ -30,6 +30,7 @@ import com.example.core_ui.component.LoadingScreen
 import com.example.core_ui.menu.AppBottomBarAction
 import com.example.core_ui.state.UiState
 import com.example.core_utils.ConversationIdUtil
+import com.example.feature_contacts.domain.model.ContactsCategory
 import com.example.feature_contacts.presentation.contacts.component.ContactsCategory
 import com.example.feature_contacts.presentation.contacts.component.ContactsFriendItem
 import com.example.feature_contacts.presentation.contacts.component.ContactsFriendRequest
@@ -129,17 +130,17 @@ fun ContactsScreen(
 
                     when (contactsCategory) {
                         ContactsCategory.FRIEND -> {
-                            val groupedFriends = friends
-                                .sortedBy { it.fullName.trim().uppercase() }
-                                .groupBy { friend ->
-                                    friend.fullName.trim()
+                            val groupedFriendWithStatuses = friends
+                                .sortedBy { it.friend.fullName.trim().uppercase() }
+                                .groupBy { friendWithStatus ->
+                                    friendWithStatus.friend.fullName.trim()
                                         .firstOrNull()
                                         ?.uppercaseChar()
                                         ?.toString() ?: "#"
                                 }
                                 .toSortedMap()
 
-                            groupedFriends.forEach { (letter, friendsInGroup) ->
+                            groupedFriendWithStatuses.forEach { (letter, friendWithStatusesInGroup) ->
                                 item(key = "header_$letter") {
                                     Spacer(modifier = Modifier.height(AppDimens.Space.Md))
                                     Text(
@@ -153,11 +154,11 @@ fun ContactsScreen(
                                 }
 
                                 items(
-                                    count = friendsInGroup.size,
-                                    key = { index -> friendsInGroup[index].id }
+                                    count = friendWithStatusesInGroup.size,
+                                    key = { index -> friendWithStatusesInGroup[index].friend.id }
                                 ) { index ->
                                     ContactsFriendItem(
-                                        user = friendsInGroup[index],
+                                        friendWithStatus = friendWithStatusesInGroup[index],
                                         onClick = { friendId ->
                                             val conversationId = ConversationIdUtil
                                                 .buildDirectConversationId(data.currentUserId, friendId)

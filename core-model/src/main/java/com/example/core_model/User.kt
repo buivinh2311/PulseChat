@@ -14,7 +14,6 @@ data class User(
     val bio: String? = null,
     val dateOfBirth: Timestamp? = null,
     val gender: Gender? = null,
-    val status: UserStatus = UserStatus.OFFLINE,
     val fcmTokens: List<String> = emptyList(),
     val createdAt: Timestamp
 )

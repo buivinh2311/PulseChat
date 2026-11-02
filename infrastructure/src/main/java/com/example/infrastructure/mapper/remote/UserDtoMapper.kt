@@ -16,7 +16,6 @@ fun UserDto.toDomain(): User {
         bio = bio,
         dateOfBirth = dateOfBirth,
         gender = gender?.let { Gender.valueOf(it) },
-        status = UserStatus.valueOf(status),
         fcmTokens = fcmTokens,
         createdAt = createdAt ?: Timestamp.now()
     )
@@ -32,7 +31,6 @@ fun User.toDto(): UserDto {
         bio = bio,
         dateOfBirth = dateOfBirth,
         gender = gender?.name,
-        status = status.name,
         fcmTokens = fcmTokens,
         createdAt = createdAt
     )
