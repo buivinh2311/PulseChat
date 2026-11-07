@@ -26,8 +26,7 @@ interface ConversationRepository {
         friendId: String
     ): String
 
-    suspend fun pinConversation(
-        currentUserId: String,
-        conversationId: String
-    ): Result<Unit>
+    suspend fun pinConversation(conversationId: String): Result<Unit>
+
+    suspend fun unpinConversation(conversationId: String): Result<Unit>
 }

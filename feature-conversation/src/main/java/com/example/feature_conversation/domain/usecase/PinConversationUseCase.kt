@@ -24,6 +24,6 @@ class PinConversationUseCase @Inject constructor(
                 SecurityException("Only the group leader can pin conversation")
             )
         }
-        return conversationRepository.pinConversation(currentUserId, conversationId)
+        return conversationRepository.pinConversation(conversationId)
     }
 }

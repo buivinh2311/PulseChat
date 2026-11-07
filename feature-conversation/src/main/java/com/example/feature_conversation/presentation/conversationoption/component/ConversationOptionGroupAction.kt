@@ -75,6 +75,8 @@ fun ConversationOptionGroupAction(
                 onToggle = { isChecked ->
                     if(isChecked) {
                         onConversationGroupOptionAction(ConversationGroupOptionAction.PIN)
+                    } else {
+                        onConversationGroupOptionAction(ConversationGroupOptionAction.UNPIN)
                     }
                 }
             )

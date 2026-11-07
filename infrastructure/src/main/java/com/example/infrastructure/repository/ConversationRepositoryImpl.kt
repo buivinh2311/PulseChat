@@ -9,6 +9,7 @@ import com.example.core_network.dto.ConversationDto
 import com.example.infrastructure.mapper.remote.toDomain
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
@@ -198,14 +199,23 @@ class ConversationRepositoryImpl @Inject constructor(
         return buildConversationId(currentUserId, friendId)
     }
 
-    override suspend fun pinConversation(
-        currentUserId: String,
-        conversationId: String
-    ): Result<Unit> {
+    override suspend fun pinConversation(conversationId: String): Result<Unit> {
         return try {
             firestore.collection(CONVERSATIONS)
                 .document(conversationId)
                 .update("pinnedAt", Timestamp.now())
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun unpinConversation(conversationId: String): Result<Unit> {
+        return try {
+            firestore.collection(CONVERSATIONS)
+                .document(conversationId)
+                .update("pinnedAt", null)
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {

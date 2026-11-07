@@ -8,6 +8,7 @@ import com.example.feature_conversation.domain.usecase.ChangeGroupAvatarUseCase
 import com.example.feature_conversation.domain.usecase.ChangeGroupNameUseCase
 import com.example.feature_conversation.domain.usecase.ObserveConversationByIdUseCase
 import com.example.feature_conversation.domain.usecase.PinConversationUseCase
+import com.example.feature_conversation.domain.usecase.UnpinConversationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,8 @@ class ConversationOptionViewModel @Inject constructor(
     private val observeConversationByIdUseCase: ObserveConversationByIdUseCase,
     private val changeGroupAvatarUseCase: ChangeGroupAvatarUseCase,
     private val changeGroupNameUseCase: ChangeGroupNameUseCase,
-    private val pinConversationUseCase: PinConversationUseCase
+    private val pinConversationUseCase: PinConversationUseCase,
+    private val unpinConversationUseCase: UnpinConversationUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow<UiState<ConversationOptionUiState>>(
         UiState.Loading
@@ -76,6 +78,15 @@ class ConversationOptionViewModel @Inject constructor(
     fun pinConversation(conversationId: String) {
         viewModelScope.launch {
             pinConversationUseCase(conversationId)
+                .onFailure {
+                    _event.emit(ConversationOptionEvent.ShowError)
+                }
+        }
+    }
+
+    fun unpinConversation(conversationId: String) {
+        viewModelScope.launch {
+            unpinConversationUseCase(conversationId)
                 .onFailure {
                     _event.emit(ConversationOptionEvent.ShowError)
                 }

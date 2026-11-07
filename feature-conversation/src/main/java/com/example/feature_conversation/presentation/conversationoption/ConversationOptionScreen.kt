@@ -84,6 +84,9 @@ fun ConversationOptionScreen(
             ConversationGroupOptionAction.PIN -> {
                 conversationOptionViewModel.pinConversation(conversationId)
             }
+            ConversationGroupOptionAction.UNPIN -> {
+                conversationOptionViewModel.unpinConversation(conversationId)
+            }
             ConversationGroupOptionAction.VIEW_MEMBER -> {}
             ConversationGroupOptionAction.VIEW_GROUP_LINK -> {}
             ConversationGroupOptionAction.DELETE_CHAT_HISTORY -> {}
