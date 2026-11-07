@@ -33,7 +33,7 @@ import com.example.core_resource.R
 @Composable
 fun ConversationOptionDirectAvatar(
     modifier: Modifier = Modifier,
-    user: User
+    friend: User
 ) {
     Surface(
         modifier = modifier
@@ -55,7 +55,7 @@ fun ConversationOptionDirectAvatar(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = user.avatarUrl,
+                model = friend.avatarUrl,
                 contentDescription = null,
                 placeholder = painterResource(R.drawable.account),
                 error = painterResource(R.drawable.account),
@@ -73,7 +73,7 @@ fun ConversationOptionDirectAvatar(
             Spacer(modifier = Modifier.height(AppDimens.Space.Md))
 
             Text(
-                text = user.fullName,
+                text = friend.fullName,
                 style = MaterialTheme.typography.headlineMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

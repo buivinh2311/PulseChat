@@ -16,10 +16,15 @@ import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.ButtonNavigateItem
+import com.example.feature_conversation.domain.model.ConversationGroupOption
+import com.example.feature_conversation.domain.model.ConversationGroupOptionAction
+import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 
 @Composable
 fun ConversationOptionGroupInfo(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    data: ConversationDetailData,
+    onConversationGroupOptionAction: (ConversationGroupOptionAction) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -50,7 +55,11 @@ fun ConversationOptionGroupInfo(
                 text = stringResource(R.string.description_member),
                 icon = AppIcons.Member,
                 iconColor = MaterialTheme.colorScheme.primary,
-                onNavigate = { }
+                onNavigate = {
+                    onConversationGroupOptionAction(
+                        ConversationGroupOptionAction.VIEW_MEMBER
+                    )
+                }
             )
 
             ButtonNavigateItem(

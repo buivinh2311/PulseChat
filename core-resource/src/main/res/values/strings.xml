@@ -245,4 +245,5 @@
     <string name="title_change_group_name">Đổi tên nhóm</string>
     <string name="label_refuse">Từ chối</string>
     <string name="label_add_friend">Thêm bạn bè</string>
+    <string name="description_create_vote">Lấy ý kiến các thành viên</string>
 </resources>

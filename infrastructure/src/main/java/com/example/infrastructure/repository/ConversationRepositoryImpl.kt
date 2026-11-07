@@ -10,6 +10,7 @@ import com.example.infrastructure.mapper.remote.toDomain
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.channels.awaitClose
@@ -21,7 +22,7 @@ import javax.inject.Inject
 
 class ConversationRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
-): ConversationRepository {
+) : ConversationRepository {
     companion object {
         const val CONVERSATIONS = "conversations"
     }
@@ -75,23 +76,30 @@ class ConversationRepositoryImpl @Inject constructor(
 
     override fun observeConversationsByUserId(
         userId: String
-    ): Flow<List<Conversation>> = callbackFlow{
+    ): Flow<List<Conversation>> = callbackFlow {
         val listener = firestore
             .collection(CONVERSATIONS)
             .whereArrayContains("participants", userId)
             .addSnapshotListener { snapshots, exception ->
-                if(exception != null) {
+                if (exception != null) {
                     close(exception)
                     return@addSnapshotListener
                 }
+
                 val conversations = snapshots?.documents
                     ?.mapNotNull {
-                        it.toObject(ConversationDto::class.java)
-                            ?.toDomain()
+                        it.toObject(ConversationDto::class.java)?.toDomain()
                     }
+                    ?.sortedWith(
+                        compareByDescending<Conversation> { it.pinnedAt != null }
+                            .thenByDescending { it.pinnedAt }
+                            .thenByDescending { it.lastMessageTime }
+                    )
                     ?: emptyList()
+
                 trySend(conversations)
             }
+
         awaitClose {
             listener.remove()
         }
@@ -156,7 +164,7 @@ class ConversationRepositoryImpl @Inject constructor(
                 addAll(otherUser.map { it.id })
             }
 
-            val type = if(otherUser.size < 2) {
+            val type = if (otherUser.size < 2) {
                 ConversationType.DIRECT
             } else {
                 ConversationType.GROUP
@@ -188,5 +196,20 @@ class ConversationRepositoryImpl @Inject constructor(
         friendId: String
     ): String {
         return buildConversationId(currentUserId, friendId)
+    }
+
+    override suspend fun pinConversation(
+        currentUserId: String,
+        conversationId: String
+    ): Result<Unit> {
+        return try {
+            firestore.collection(CONVERSATIONS)
+                .document(conversationId)
+                .update("pinnedAt", Timestamp.now())
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

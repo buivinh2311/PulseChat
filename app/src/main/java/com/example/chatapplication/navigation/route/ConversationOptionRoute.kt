@@ -13,14 +13,6 @@ fun ConversationOptionRoute(
     ConversationOptionScreen(
         conversationId = conversationId,
         onBack = onBack,
-        onBlock = {},
-        onUnFriend = {},
-        onViewMedia = {},
-        onCreateGroup = onCreateGroup,
-        onDeleteChatHistory = {},
-        onTurnOnNotification = {},
-        onTurnOffNotification = {},
-        onChangeBackgroundImage = {},
-        onViewGroupMember = onViewGroupMember
+        onCreateGroup = onCreateGroup
     )
 }

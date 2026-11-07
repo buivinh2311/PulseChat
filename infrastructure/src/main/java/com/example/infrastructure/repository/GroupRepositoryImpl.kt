@@ -2,10 +2,17 @@ package com.example.infrastructure.repository
 
 import android.util.Log
 import com.example.core_domain.repository.GroupRepository
+import com.example.core_model.Conversation
 import com.example.core_model.Group
+import com.example.core_model.User
+import com.example.core_model.enum.ConversationType
+import com.example.core_network.dto.ConversationDto
 import com.example.core_network.dto.GroupDto
 import com.example.infrastructure.mapper.remote.toDomain
+import com.example.infrastructure.mapper.remote.toDto
+import com.example.infrastructure.repository.ConversationRepositoryImpl.Companion.CONVERSATIONS
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -22,30 +29,34 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createGroup(
-        name: String,
-        avatarUrl: String?,
-        conversationId: String,
-        leaderId: String
-    ): Result<Unit> {
+        conversation: Conversation,
+        group: Group
+    ): Result<String> {
         return try {
+            val batch = firestore.batch()
+
+            val conversationRef = firestore
+                .collection("conversations")
+                .document()
+
             val groupRef = firestore
                 .collection(GROUPS)
                 .document()
 
-            val group = GroupDto(
+            val conversationDto = conversation.copy(
+                id = conversationRef.id
+            ).toDto()
+
+            val groupDto = group.copy(
                 id = groupRef.id,
-                name = name,
-                avatarUrl = avatarUrl,
-                conversationId = conversationId,
-                leaderId = leaderId,
-                createdAt = Timestamp.now()
-            )
-            firestore
-                .collection(GROUPS)
-                .document()
-                .set(group)
-                .await()
-            Result.success(Unit)
+                conversationId = conversationRef.id
+            ).toDto()
+
+            batch.set(conversationRef, conversationDto)
+            batch.set(groupRef, groupDto)
+            batch.commit().await()
+
+            Result.success(conversationRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }

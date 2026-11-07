@@ -80,6 +80,7 @@ data class Dimens(
     )
 
     data class IconDimen(
+        val Es: Dp,
         val Xxs: Dp,
         val Xs: Dp,
         val Sm: Dp,
@@ -168,6 +169,7 @@ fun dimens(): Dimens {
         ),
 
         Icon = Dimens.IconDimen(
+            Es = (16 * scale).dp,
             Xxs = (18 * scale).dp,
             Xs = (22 * scale).dp,
             Sm = (26 * scale).dp,

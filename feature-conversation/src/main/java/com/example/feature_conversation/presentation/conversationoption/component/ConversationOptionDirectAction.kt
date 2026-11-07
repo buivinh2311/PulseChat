@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
+import com.example.core_model.User
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
@@ -21,7 +22,8 @@ import com.example.core_ui.component.ButtonToggleItem
 @Composable
 fun ConversationOptionDirectAction(
     modifier: Modifier = Modifier,
-    onCreateGroup: () -> Unit
+    friend: User,
+    onCreateGroup: (String) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -57,19 +59,15 @@ fun ConversationOptionDirectAction(
 
             ButtonNavigateItem(
                 title = stringResource(R.string.title_create_group),
-                text = stringResource(R.string.description_create_group),
+                text = stringResource(
+                    R.string.description_create_group,
+                    friend.fullName
+                ),
                 icon = AppIcons.CreateGroup,
                 iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                onNavigate = onCreateGroup
-            )
-
-            ButtonToggleItem(
-                title = stringResource(R.string.title_pin_conversation),
-                text = stringResource(R.string.description_pin_conversation),
-                icon = AppIcons.Pin,
-                iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                isChecked = true,
-                onToggle = { }
+                onNavigate = {
+                    onCreateGroup(friend.id)
+                }
             )
 
             ButtonToggleItem(

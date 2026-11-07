@@ -12,5 +12,6 @@ data class ConversationDto(
     val lastMessage: String? = null,
     val lastMessageTime: Timestamp? = null,
     val systemMessage: Boolean = false,
+    val pinnedAt: Timestamp? = null,
     val createdAt: Timestamp = Timestamp.now()
 )

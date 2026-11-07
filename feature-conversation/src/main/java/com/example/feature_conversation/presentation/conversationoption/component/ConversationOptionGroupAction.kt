@@ -17,10 +17,14 @@ import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_ui.component.ButtonNavigateItem
 import com.example.core_ui.component.ButtonToggleItem
+import com.example.feature_conversation.domain.model.ConversationGroupOptionAction
+import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 
 @Composable
 fun ConversationOptionGroupAction(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    data: ConversationDetailData.Group,
+    onConversationGroupOptionAction: (ConversationGroupOptionAction) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -56,7 +60,7 @@ fun ConversationOptionGroupAction(
 
             ButtonNavigateItem(
                 title = stringResource(R.string.title_create_vote),
-                text = stringResource(R.string.description_create_group),
+                text = stringResource(R.string.description_create_vote),
                 icon = AppIcons.CreateVote,
                 iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 onNavigate = { }
@@ -67,8 +71,12 @@ fun ConversationOptionGroupAction(
                 text = stringResource(R.string.description_pin_conversation),
                 icon = AppIcons.Pin,
                 iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                isChecked = true,
-                onToggle = { }
+                isChecked = data.conversation.pinnedAt != null,
+                onToggle = { isChecked ->
+                    if(isChecked) {
+                        onConversationGroupOptionAction(ConversationGroupOptionAction.PIN)
+                    }
+                }
             )
 
             ButtonToggleItem(

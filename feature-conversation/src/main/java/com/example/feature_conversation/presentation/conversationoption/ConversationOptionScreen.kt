@@ -30,6 +30,7 @@ import com.example.core_ui.component.ErrorScreen
 import com.example.core_ui.component.LoadingScreen
 import com.example.core_ui.component.showToast
 import com.example.core_ui.state.UiState
+import com.example.feature_conversation.domain.model.ConversationGroupOptionAction
 import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 import com.example.feature_conversation.presentation.conversationoption.component.ConversationOptionConnect
 import com.example.feature_conversation.presentation.conversationoption.component.ConversationOptionDirectAction
@@ -46,15 +47,7 @@ import com.example.feature_conversation.presentation.conversationoption.componen
 fun ConversationOptionScreen(
     conversationId: String,
     onBack: () -> Unit,
-    onChangeBackgroundImage: () -> Unit,
-    onTurnOffNotification: () -> Unit,
-    onTurnOnNotification: () -> Unit,
-    onViewMedia: () -> Unit,
-    onCreateGroup: (String) -> Unit,
-    onViewGroupMember: (String) -> Unit,
-    onBlock: () -> Unit,
-    onDeleteChatHistory: () -> Unit,
-    onUnFriend: () -> Unit
+    onCreateGroup: (String) -> Unit
 ) {
     val conversationOptionViewModel: ConversationOptionViewModel = hiltViewModel()
     val uiState by conversationOptionViewModel.uiState.collectAsStateWithLifecycle()
@@ -78,6 +71,24 @@ fun ConversationOptionScreen(
 
     var showTurnOffNotification by remember {
         mutableStateOf(false)
+    }
+
+    val onConversationGroupOptionAction: (ConversationGroupOptionAction) -> Unit = { action ->
+        when(action) {
+            ConversationGroupOptionAction.CHANGE_BACKGROUND_IMAGE -> {}
+            ConversationGroupOptionAction.TURN_OFF_NOTIFICATION -> {}
+            ConversationGroupOptionAction.TURN_ON_NOTIFICATION -> {}
+            ConversationGroupOptionAction.VIEW_MEDIA -> {}
+            ConversationGroupOptionAction.VIEW_GROUP_CALENDAR -> {}
+            ConversationGroupOptionAction.CREATE_VOTE -> {}
+            ConversationGroupOptionAction.PIN -> {
+                conversationOptionViewModel.pinConversation(conversationId)
+            }
+            ConversationGroupOptionAction.VIEW_MEMBER -> {}
+            ConversationGroupOptionAction.VIEW_GROUP_LINK -> {}
+            ConversationGroupOptionAction.DELETE_CHAT_HISTORY -> {}
+            ConversationGroupOptionAction.LEAVE_THE_GROUP -> {}
+        }
     }
 
     Scaffold(
@@ -116,20 +127,21 @@ fun ConversationOptionScreen(
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(AppDimens.Space.Lg)
+                            verticalArrangement = Arrangement.spacedBy(AppDimens.Space.Md)
                         ) {
                             when(val data = conversationOptionUiState.conversationDetailData) {
                                 is ConversationDetailData.Direct -> {
-                                    val user = data.user
+                                    val friend = data.user
                                     ConversationOptionDirectAvatar(
-                                        user = user
+                                        friend = friend
                                     )
 
                                     ConversationOptionMedia()
 
                                     ConversationOptionDirectAction(
-                                        onCreateGroup = {
-                                            onCreateGroup(user.id)
+                                        friend = friend,
+                                        onCreateGroup = { friendId ->
+                                            onCreateGroup(friendId)
                                         }
                                     )
 
@@ -153,9 +165,15 @@ fun ConversationOptionScreen(
 
                                     ConversationOptionMedia()
 
-                                    ConversationOptionGroupAction()
+                                    ConversationOptionGroupAction(
+                                        data = data,
+                                        onConversationGroupOptionAction = onConversationGroupOptionAction
+                                    )
 
-                                    ConversationOptionGroupInfo()
+                                    ConversationOptionGroupInfo(
+                                        data = data,
+                                        onConversationGroupOptionAction = onConversationGroupOptionAction
+                                    )
 
                                     ConversationOptionStorage()
 

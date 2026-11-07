@@ -21,5 +21,13 @@ interface ConversationRepository {
         otherUser: List<User>
     ): Result<String>
 
-    fun getConversationIdByFriendship(currentUserId: String, friendId: String): String
+    fun getConversationIdByFriendship(
+        currentUserId: String,
+        friendId: String
+    ): String
+
+    suspend fun pinConversation(
+        currentUserId: String,
+        conversationId: String
+    ): Result<Unit>
 }

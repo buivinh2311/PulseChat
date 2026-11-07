@@ -167,7 +167,9 @@ fun ConversationScreen(
                     }
 
                     item {
-                        Spacer(modifier = Modifier.height(AppDimens.Space.Md))
+                        if(conversationWithInfos.any { it.isOnline }) {
+                            Spacer(modifier = Modifier.height(AppDimens.Space.Md))
+                        }
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(AppDimens.Space.Sm),

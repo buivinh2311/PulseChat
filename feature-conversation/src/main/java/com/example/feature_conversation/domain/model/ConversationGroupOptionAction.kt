@@ -7,6 +7,7 @@ enum class ConversationGroupOptionAction {
     VIEW_MEDIA,
     VIEW_GROUP_CALENDAR,
     CREATE_VOTE,
+    PIN,
     VIEW_MEMBER,
     VIEW_GROUP_LINK,
     DELETE_CHAT_HISTORY,

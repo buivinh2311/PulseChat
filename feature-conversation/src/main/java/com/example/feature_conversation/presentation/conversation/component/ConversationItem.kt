@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,7 +33,9 @@ import com.example.core_model.composite.ConversationDisplayInfo
 import com.example.core_model.composite.ConversationWithInfo
 import com.example.core_model.enum.ConversationType
 import com.example.core_resource.AppDimens
+import com.example.core_resource.AppIcons
 import com.example.core_resource.R
+import com.example.core_utils.toRelativeString
 
 @Composable
 fun ConversationItem(
@@ -114,12 +117,22 @@ fun ConversationItem(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.weight(1f)
                     )
+                    Spacer(modifier = Modifier.width(AppDimens.Space.Sm))
+
+                    conversation.pinnedAt?.let {
+                        Icon(
+                            painter = AppIcons.Pin,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier.size(AppDimens.Icon.Es)
+                        )
+                    }
 
                     conversation.lastMessageTime?.let {
-                        Spacer(modifier = Modifier.width(AppDimens.Space.Sm))
+                        Spacer(modifier = Modifier.width(AppDimens.Space.Xxs))
                         Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
+                            text = it.toRelativeString(),
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.outline
                         )
                     }
@@ -164,7 +177,7 @@ fun ConversationItem(
                         Spacer(modifier = Modifier.width(AppDimens.Space.Lg))
                         Text(
                             text = "3",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onError,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(AppDimens.Radius.Lg))
