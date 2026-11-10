@@ -226,6 +226,9 @@ private fun getLastMessagePreview(
                 SystemMessageType.CREATE_GROUP
                     -> stringResource(R.string.text_system_create_group)
 
+                SystemMessageType.CHANGE_GROUP_AVATAR
+                    -> stringResource(R.string.text_system_change_group_avatar)
+
                 SystemMessageType.CHANGE_GROUP_NAME
                     -> stringResource(
                     R.string.text_system_change_group_name,

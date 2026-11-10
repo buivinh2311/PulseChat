@@ -25,15 +25,6 @@ import javax.inject.Inject
 class ConversationRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : ConversationRepository {
-    private fun buildConversationId(
-        user1: String,
-        user2: String
-    ): String {
-        return listOf(user1, user2)
-            .sorted()
-            .joinToString("_")
-    }
-
     override suspend fun getConversationById(
         conversationId: String
     ): Result<Conversation?> {
@@ -127,31 +118,23 @@ class ConversationRepositoryImpl @Inject constructor(
         user2: User
     ): Result<String> {
         return try {
-            val conversationId = buildConversationId(user1.uid, user2.id)
-            val ref = firestore
+            val conversationRef = firestore
                 .collection(FirestoreCollectionsUtil.CONVERSATIONS)
-                .document(conversationId)
-            if (!ref.get().await().exists()) {
-                ref.set(
+                .document()
+            if (!conversationRef.get().await().exists()) {
+                conversationRef.set(
                     ConversationDto(
-                        id = conversationId,
+                        id = conversationRef.id,
                         type = ConversationType.DIRECT.name,
                         participants = listOf(user1.uid, user2.id),
                         createdAt = Timestamp.now()
                     )
                 ).await()
             }
-            Result.success(conversationId)
+            Result.success(conversationRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-
-    override fun getConversationIdByFriendship(
-        currentUserId: String,
-        friendId: String
-    ): String {
-        return buildConversationId(currentUserId, friendId)
     }
 
     override suspend fun pinConversation(conversationId: String): Result<Unit> {

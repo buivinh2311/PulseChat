@@ -151,6 +151,7 @@ fun ContactsScreen(
                                             horizontal = AppDimens.Space.Md
                                         )
                                     )
+                                    Spacer(modifier = Modifier.height(AppDimens.Space.Xxs))
                                 }
 
                                 items(
@@ -161,10 +162,18 @@ fun ContactsScreen(
                                         friendWithStatus = friendWithStatusesInGroup[index],
                                         onClick = { friendId ->
                                             val conversationId = ConversationIdUtil
-                                                .buildDirectConversationId(data.currentUserId, friendId)
+                                                .buildDirectConversationId(
+                                                    data.currentUserId,
+                                                    friendId
+                                                )
                                             onContact(conversationId)
                                         }
                                     )
+                                    if(index != friendWithStatusesInGroup.size - 1) {
+                                        Spacer(modifier = Modifier.height(
+                                            AppDimens.Space.Xs + AppDimens.Space.Xxs)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -186,10 +195,12 @@ fun ContactsScreen(
                                     Text(
                                         text = letter,
                                         style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.outline,
                                         modifier = Modifier.padding(
                                             horizontal = AppDimens.Space.Md
                                         )
                                     )
+                                    Spacer(modifier = Modifier.height(AppDimens.Space.Xxs))
                                 }
 
                                 items(
@@ -202,6 +213,11 @@ fun ContactsScreen(
                                             onContact(conversationId)
                                         }
                                     )
+                                    if(index != groupsInGroup.size - 1) {
+                                        Spacer(modifier = Modifier.height(
+                                            AppDimens.Space.Xs + AppDimens.Space.Xxs)
+                                        )
+                                    }
                                 }
                             }
                         }
