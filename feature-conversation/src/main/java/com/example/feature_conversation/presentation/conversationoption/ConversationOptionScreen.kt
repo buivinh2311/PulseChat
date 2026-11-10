@@ -47,7 +47,8 @@ import com.example.feature_conversation.presentation.conversationoption.componen
 fun ConversationOptionScreen(
     conversationId: String,
     onBack: () -> Unit,
-    onCreateGroup: (String) -> Unit
+    onCreateGroup: (String) -> Unit,
+    onViewMember: (String) -> Unit
 ) {
     val conversationOptionViewModel: ConversationOptionViewModel = hiltViewModel()
     val uiState by conversationOptionViewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +88,7 @@ fun ConversationOptionScreen(
             ConversationGroupOptionAction.UNPIN -> {
                 conversationOptionViewModel.unpinConversation(conversationId)
             }
-            ConversationGroupOptionAction.VIEW_MEMBER -> {}
+            ConversationGroupOptionAction.VIEW_MEMBER -> onViewMember(conversationId)
             ConversationGroupOptionAction.VIEW_GROUP_LINK -> {}
             ConversationGroupOptionAction.DELETE_CHAT_HISTORY -> {}
             ConversationGroupOptionAction.LEAVE_THE_GROUP -> {}
@@ -159,10 +160,11 @@ fun ConversationOptionScreen(
                                     ConversationOptionGroupAvatar(
                                         context = context,
                                         group = data.group,
+                                        currentUserId = conversationOptionUiState.currentUserId,
                                         onChangeGroupAvatar = { },
-                                        onChangeGroupName = { groupId, groupName ->
+                                        onChangeGroupName = { group, groupName ->
                                             conversationOptionViewModel
-                                                .changeGroupName(groupId, groupName)
+                                                .changeGroupName(group, groupName)
                                         }
                                     )
 

@@ -2,6 +2,7 @@ package com.example.core_domain.repository
 
 import com.example.core_model.Conversation
 import com.example.core_model.Group
+import com.example.core_model.Message
 import com.example.core_model.User
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +10,9 @@ import kotlinx.coroutines.flow.Flow
 interface GroupRepository {
     suspend fun createGroup(
         conversation: Conversation,
-        group: Group
+        group: Group,
+        members: List<User>,
+        actorUserName: String
     ): Result<String>
 
     suspend fun getGroupByConversationId(conversationId: String): Result<Group?>
@@ -20,6 +23,11 @@ interface GroupRepository {
 
     suspend fun changeAvatar(groupId: String, avatarUrl: String): Result<Unit>
 
-    suspend fun changeGroupName(groupId: String, groupName: String): Result<Unit>
+    suspend fun changeGroupName(
+        group: Group,
+        groupName: String,
+        systemMessage: Message.System,
+        actorUserName: String,
+    ): Result<Unit>
 
 }

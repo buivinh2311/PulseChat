@@ -68,10 +68,10 @@ fun ViewMemberScreen(
                         key = { index -> users[index].id }
                     ) { index ->
                         val user = users[index]
-                        ViewGroupMemberItem(
-                            name = user.fullName,
-                            avatarUrl = user.avatarUrl
-                        )
+//                        ViewGroupMemberItem(
+//                            name = user.fullName,
+//                            avatarUrl = user.avatarUrl
+//                        )
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.example.infrastructure.repository
 import com.example.core_domain.repository.FriendshipRepository
 import com.example.core_model.Friendship
 import com.example.core_network.dto.FriendDto
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,10 +17,6 @@ import javax.inject.Inject
 class FriendshipRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): FriendshipRepository {
-    private companion object {
-        const val FRIENDS = "friends"
-    }
-
     private fun buildFriendId(
         user1: String,
         user2: String
@@ -43,7 +40,7 @@ class FriendshipRepositoryImpl @Inject constructor(
             )
 
             val friendRef = firestore
-                .collection(FRIENDS)
+                .collection(FirestoreCollectionsUtil.FRIENDSHIPS)
                 .document(friendId)
 
             transaction.set(friendRef, friend)
@@ -59,7 +56,7 @@ class FriendshipRepositoryImpl @Inject constructor(
     ): Flow<Boolean> = callbackFlow {
         val friendId = buildFriendId(user1, user2)
         val listener = firestore
-            .collection(FRIENDS)
+            .collection(FirestoreCollectionsUtil.FRIENDSHIPS)
             .document(friendId)
             .addSnapshotListener { snapshot, exception ->
                 if(exception != null) {
@@ -77,7 +74,7 @@ class FriendshipRepositoryImpl @Inject constructor(
         uid: String
     ): Flow<List<Friendship>> = callbackFlow {
         val listener = firestore
-            .collection(FRIENDS)
+            .collection(FirestoreCollectionsUtil.FRIENDSHIPS)
             .whereArrayContains("participants", uid)
             .addSnapshotListener { snapshots, exception ->
                 if(exception != null) {
@@ -100,7 +97,7 @@ class FriendshipRepositoryImpl @Inject constructor(
     override suspend fun getFriendIdsByUserId(uid: String): Result<List<String>> {
         return try {
             val friendIds = firestore
-                .collection(FRIENDS)
+                .collection(FirestoreCollectionsUtil.FRIENDSHIPS)
                 .whereArrayContains("participants", uid)
                 .get()
                 .await()
@@ -119,7 +116,7 @@ class FriendshipRepositoryImpl @Inject constructor(
     override suspend fun unFriend(friendId: String): Result<Unit> {
         return try {
             firestore
-                .collection(FRIENDS)
+                .collection(FirestoreCollectionsUtil.FRIENDSHIPS)
                 .document(friendId)
                 .delete()
                 .await()

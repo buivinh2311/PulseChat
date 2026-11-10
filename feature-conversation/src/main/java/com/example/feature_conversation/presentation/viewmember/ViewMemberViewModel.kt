@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core_ui.state.UiState
 import com.example.core_domain.usecase.GetCurrentUserUseCase
+import com.example.core_domain.usecase.ObserveOnlineStatusUseCase
 import com.example.feature_conversation.domain.usecase.ObserveConversationByIdUseCase
 import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewMemberViewModel @Inject constructor(
     private val observeConversationByIdUseCase: ObserveConversationByIdUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val observeOnlineStatusUseCase: ObserveOnlineStatusUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow<UiState<ViewMemberUiState>>(
         UiState.Loading

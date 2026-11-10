@@ -246,4 +246,7 @@
     <string name="label_refuse">Từ chối</string>
     <string name="label_add_friend">Thêm bạn bè</string>
     <string name="description_create_vote">Lấy ý kiến các thành viên</string>
+    <string name="text_system_create_group">đã tạo nhóm</string>
+    <string name="text_system_add_group_member">đã thêm %s vào nhóm</string>
+    <string name="text_system_change_group_name">đã đổi tên nhóm thành %s</string>
 </resources>

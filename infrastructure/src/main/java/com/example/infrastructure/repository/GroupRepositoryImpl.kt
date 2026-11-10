@@ -1,46 +1,45 @@
 package com.example.infrastructure.repository
 
+import android.content.Context
 import android.util.Log
 import com.example.core_domain.repository.GroupRepository
 import com.example.core_model.Conversation
 import com.example.core_model.Group
+import com.example.core_model.Message
 import com.example.core_model.User
-import com.example.core_model.enum.ConversationType
-import com.example.core_network.dto.ConversationDto
+import com.example.core_model.enum.MessageStatus
+import com.example.core_model.enum.SystemMessageType
 import com.example.core_network.dto.GroupDto
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
 import com.example.infrastructure.mapper.remote.toDto
-import com.example.infrastructure.repository.ConversationRepositoryImpl.Companion.CONVERSATIONS
+import com.example.infrastructure.util.addMessageAndUpdateConversation
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     private val firestore: FirebaseFirestore
 ) : GroupRepository {
-    companion object {
-        const val GROUPS = "groups"
-    }
-
     override suspend fun createGroup(
         conversation: Conversation,
-        group: Group
+        group: Group,
+        members: List<User>,
+        actorUserName: String
     ): Result<String> {
         return try {
-            val batch = firestore.batch()
-
             val conversationRef = firestore
-                .collection("conversations")
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document()
 
             val groupRef = firestore
-                .collection(GROUPS)
+                .collection(FirestoreCollectionsUtil.GROUPS)
                 .document()
 
             val conversationDto = conversation.copy(
@@ -52,10 +51,38 @@ class GroupRepositoryImpl @Inject constructor(
                 conversationId = conversationRef.id
             ).toDto()
 
-            batch.set(conversationRef, conversationDto)
-            batch.set(groupRef, groupDto)
-            batch.commit().await()
+            firestore.runBatch { batch ->
+                batch.set(conversationRef, conversationDto)
+                batch.set(groupRef, groupDto)
+                members.forEach { member ->
+                    val messageRef = conversationRef
+                        .collection(FirestoreCollectionsUtil.MESSAGES)
+                        .document()
 
+                    val systemMessage = Message.System(
+                        id = "",
+                        conversationId = conversationRef.id,
+                        senderId = group.leaderId,
+                        status = MessageStatus.DELIVERED,
+                        createdAt = Timestamp.now(),
+                        systemMessageType = if(group.leaderId == member.id) {
+                            SystemMessageType.CREATE_GROUP
+                        } else {
+                            SystemMessageType.ADD_GROUP_MEMBER
+                        },
+                        text = member.fullName,
+                        targetUserId = member.id
+                    )
+
+                    batch.addMessageAndUpdateConversation(
+                        conversationRef = conversationRef,
+                        messageRef = messageRef,
+                        message = systemMessage,
+                        actorUserName = actorUserName,
+                        targetUserName = member.fullName
+                    )
+                }
+            }.await()
             Result.success(conversationRef.id)
         } catch (e: Exception) {
             Result.failure(e)
@@ -67,7 +94,7 @@ class GroupRepositoryImpl @Inject constructor(
     ): Result<Group?> {
         return try {
             val group = firestore
-                .collection(GROUPS)
+                .collection(FirestoreCollectionsUtil.GROUPS)
                 .whereEqualTo("conversationId", conversationId)
                 .get()
                 .await()
@@ -85,7 +112,7 @@ class GroupRepositoryImpl @Inject constructor(
     ): Result<List<Group>> {
         return try {
             val groups = firestore
-                .collection(GROUPS)
+                .collection(FirestoreCollectionsUtil.GROUPS)
                 .whereIn("conversationId", conversationIds)
                 .get()
                 .await()
@@ -102,7 +129,7 @@ class GroupRepositoryImpl @Inject constructor(
         conversationId: String
     ): Flow<Group?> = callbackFlow {
         val listener = firestore
-            .collection(GROUPS)
+            .collection(FirestoreCollectionsUtil.GROUPS)
             .whereEqualTo("conversationId", conversationId)
             .addSnapshotListener { snapshots, exception ->
                 if (exception != null) {
@@ -127,7 +154,7 @@ class GroupRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             firestore
-                .collection(GROUPS)
+                .collection(FirestoreCollectionsUtil.GROUPS)
                 .document(groupId)
                 .update("avatarUrl", avatarUrl)
                 .await()
@@ -138,15 +165,33 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun changeGroupName(
-        groupId: String,
-        groupName: String
+        group: Group,
+        groupName: String,
+        systemMessage: Message.System,
+        actorUserName: String
     ): Result<Unit> {
         return try {
-            firestore
-                .collection(GROUPS)
-                .document(groupId)
-                .update("name", groupName)
-                .await()
+            val groupRef = firestore
+                .collection(FirestoreCollectionsUtil.GROUPS)
+                .document(group.id)
+
+            val conversationRef = firestore
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
+                .document(group.conversationId)
+
+            val messageRef = conversationRef
+                .collection(FirestoreCollectionsUtil.MESSAGES)
+                .document()
+
+            firestore.runBatch { batch ->
+                batch.update(groupRef, "name", groupName)
+                batch.addMessageAndUpdateConversation(
+                    conversationRef = conversationRef,
+                    messageRef = messageRef,
+                    message = systemMessage,
+                    actorUserName = actorUserName
+                )
+            }.await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

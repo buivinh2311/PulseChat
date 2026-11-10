@@ -96,7 +96,9 @@ fun MessageDto.toDomain(): Message {
             systemMessageType = runCatching {
                 SystemMessageType.valueOf(systemMessageType.orEmpty())
             }.getOrDefault(SystemMessageType.PIN_MESSAGE),
-            targetMessageId = targetMessageId
+            text = text,
+            targetMessageId = targetMessageId,
+            targetUserId = targetUserId
         )
     }
 }
@@ -186,7 +188,9 @@ fun Message.toDto(messageId: String): MessageDto {
             status = status,
             type = MessageType.SYSTEM.name,
             systemMessageType = systemMessageType.name,
-            targetMessageId = targetMessageId
+            text = text,
+            targetMessageId = targetMessageId,
+            targetUserId = targetUserId
         )
     }
 }
@@ -214,7 +218,8 @@ fun MessageDto.toFirestoreMap(): Map<String, Any> {
         "createdAt" to createdAt,
         "readBy" to readBy,
         "systemMessageType" to systemMessageType,
-        "targetMessageId" to targetMessageId
+        "targetMessageId" to targetMessageId,
+        "targetUserId" to targetUserId
     ).filterValues { it != null }
         .mapValues { (_, value) -> value!! }
 }

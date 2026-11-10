@@ -167,7 +167,7 @@ fun AppNavHost(
                 onCreateGroup = { userId ->
                     navController.navigate("${AppRoute.CREATE_GROUP}/${userId}")
                 },
-                onViewGroupMember = { conversationId ->
+                onViewMember = { conversationId ->
                     navController.navigate("${AppRoute.VIEW_MEMBER}/${conversationId}")
                 }
             )

@@ -5,6 +5,7 @@ import com.example.core_domain.repository.FriendRequestRepository
 import com.example.core_model.FriendRequest
 import com.example.core_model.enum.FriendRequestStatus
 import com.example.core_network.dto.FriendRequestDto
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,10 +20,6 @@ import javax.inject.Inject
 class FriendRequestRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): FriendRequestRepository {
-    private companion object {
-        const val FRIEND_REQUESTS = "friend_requests"
-    }
-
     private fun buildFriendRequestId(
         senderId: String,
         receiverId: String
@@ -45,7 +42,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
             )
             val friendRequestId = buildFriendRequestId(senderId, receiverId)
             firestore
-                .collection(FRIEND_REQUESTS)
+                .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
                 .document(friendRequestId)
                 .set(request)
                 .await()
@@ -61,7 +58,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
     ): Flow<Boolean> = callbackFlow {
         val friendRequestId = buildFriendRequestId(senderId, receiverId)
         val listener = firestore
-            .collection(FRIEND_REQUESTS)
+            .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
             .document(friendRequestId)
             .addSnapshotListener { snapshots, exception ->
                 if(exception != null) {
@@ -79,7 +76,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
         uid: String
     ): Flow<List<FriendRequest>> = callbackFlow {
         val listener = firestore
-            .collection(FRIEND_REQUESTS)
+            .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
             .whereEqualTo("receiverId", uid)
             .whereEqualTo(
                 "status",
@@ -111,7 +108,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
         senderId: String
     ): Flow<List<FriendRequest>> = callbackFlow {
         val listener = firestore
-            .collection(FRIEND_REQUESTS)
+            .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
             .whereEqualTo("senderId", senderId)
             .whereEqualTo(
                 "status",
@@ -142,7 +139,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
     override suspend fun rejectRequest(requestId: String): Result<Unit> {
         return try {
             firestore
-                .collection(FRIEND_REQUESTS)
+                .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
                 .document(requestId)
                 .delete()
                 .await()
@@ -158,7 +155,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             val requestRef = firestore
-                .collection(FRIEND_REQUESTS)
+                .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
                 .document(requestId)
             transaction.delete(requestRef)
             Result.success(Unit)
@@ -170,7 +167,7 @@ class FriendRequestRepositoryImpl @Inject constructor(
     override suspend fun recallRequest(request: FriendRequest): Result<Unit> {
         return try {
             firestore
-                .collection(FRIEND_REQUESTS)
+                .collection(FirestoreCollectionsUtil.FRIEND_REQUESTS)
                 .document(request.id)
                 .delete()
                 .await()

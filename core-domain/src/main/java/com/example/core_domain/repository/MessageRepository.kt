@@ -25,7 +25,8 @@ interface MessageRepository {
 
     suspend fun sendMessage(
         senderName: String,
-        message: Message
+        message: Message,
+        targetUserName: String? = null,
     ): Result<Unit>
 
     suspend fun markAsRead(

@@ -6,6 +6,7 @@ import com.example.core_model.Conversation
 import com.example.core_model.User
 import com.example.core_model.enum.ConversationType
 import com.example.core_network.dto.ConversationDto
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
@@ -24,10 +25,6 @@ import javax.inject.Inject
 class ConversationRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : ConversationRepository {
-    companion object {
-        const val CONVERSATIONS = "conversations"
-    }
-
     private fun buildConversationId(
         user1: String,
         user2: String
@@ -42,7 +39,7 @@ class ConversationRepositoryImpl @Inject constructor(
     ): Result<Conversation?> {
         return try {
             val conversation = firestore
-                .collection(CONVERSATIONS)
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document(conversationId)
                 .get()
                 .await()
@@ -58,7 +55,7 @@ class ConversationRepositoryImpl @Inject constructor(
         conversationId: String
     ): Flow<Conversation?> = callbackFlow {
         val listener = firestore
-            .collection(CONVERSATIONS)
+            .collection(FirestoreCollectionsUtil.CONVERSATIONS)
             .document(conversationId)
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
@@ -79,7 +76,7 @@ class ConversationRepositoryImpl @Inject constructor(
         userId: String
     ): Flow<List<Conversation>> = callbackFlow {
         val listener = firestore
-            .collection(CONVERSATIONS)
+            .collection(FirestoreCollectionsUtil.CONVERSATIONS)
             .whereArrayContains("participants", userId)
             .addSnapshotListener { snapshots, exception ->
                 if (exception != null) {
@@ -110,7 +107,8 @@ class ConversationRepositoryImpl @Inject constructor(
         userId: String
     ): Result<List<Conversation>> {
         return try {
-            val conversations = firestore.collection(CONVERSATIONS)
+            val conversations = firestore
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .whereEqualTo("type", "GROUP")
                 .whereArrayContains("participants", userId)
                 .get()
@@ -131,62 +129,19 @@ class ConversationRepositoryImpl @Inject constructor(
         return try {
             val conversationId = buildConversationId(user1.uid, user2.id)
             val ref = firestore
-                .collection(CONVERSATIONS)
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document(conversationId)
             if (!ref.get().await().exists()) {
                 ref.set(
                     ConversationDto(
                         id = conversationId,
                         type = ConversationType.DIRECT.name,
-                        memberAvatars = listOf(user1.photoUrl.toString(), user2.id),
                         participants = listOf(user1.uid, user2.id),
                         createdAt = Timestamp.now()
                     )
                 ).await()
             }
             Result.success(conversationId)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun createConversation(
-        currentUser: FirebaseUser,
-        otherUser: List<User>
-    ): Result<String> {
-        return try {
-            val memberAvatars = buildList {
-                currentUser.photoUrl?.toString()?.let { add(it) }
-                addAll(otherUser.mapNotNull { it.avatarUrl })
-            }
-
-            val participants = buildList {
-                add(currentUser.uid)
-                addAll(otherUser.map { it.id })
-            }
-
-            val type = if (otherUser.size < 2) {
-                ConversationType.DIRECT
-            } else {
-                ConversationType.GROUP
-            }
-
-            val messageRef = firestore
-                .collection(CONVERSATIONS)
-                .document()
-            firestore
-                .collection(CONVERSATIONS)
-                .document()
-                .set(
-                    ConversationDto(
-                        id = messageRef.id,
-                        type = type.name,
-                        memberAvatars = memberAvatars,
-                        participants = participants,
-                        createdAt = Timestamp.now()
-                    )
-                ).await()
-            Result.success(messageRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -201,7 +156,8 @@ class ConversationRepositoryImpl @Inject constructor(
 
     override suspend fun pinConversation(conversationId: String): Result<Unit> {
         return try {
-            firestore.collection(CONVERSATIONS)
+            firestore
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document(conversationId)
                 .update("pinnedAt", Timestamp.now())
                 .await()
@@ -213,7 +169,8 @@ class ConversationRepositoryImpl @Inject constructor(
 
     override suspend fun unpinConversation(conversationId: String): Result<Unit> {
         return try {
-            firestore.collection(CONVERSATIONS)
+            firestore
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document(conversationId)
                 .update("pinnedAt", null)
                 .await()

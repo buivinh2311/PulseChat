@@ -2,6 +2,7 @@ package com.example.core_model
 
 import com.example.core_model.enum.ConversationType
 import com.example.core_model.enum.MessageType
+import com.example.core_model.enum.SystemMessageType
 import com.google.firebase.Timestamp
 
 data class Conversation(
@@ -10,9 +11,10 @@ data class Conversation(
     val participants: List<String>,
     val lastMessageActorId: String? = null,
     val lastMessageActorName: String? = null,
-    val lastMessage: String? = null,
+    val lastMessageText: String? = null,
     val lastMessageTime: Timestamp? = null,
-    val systemMessage: Boolean = false,
+    val lastMessageType: MessageType? = null,
+    val systemMessageType: SystemMessageType? = null,
     val pinnedAt: Timestamp? = null,
     val createdAt: Timestamp
 )

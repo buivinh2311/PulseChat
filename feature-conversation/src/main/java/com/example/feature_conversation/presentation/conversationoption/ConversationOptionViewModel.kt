@@ -3,6 +3,8 @@ package com.example.feature_conversation.presentation.conversationoption
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core_domain.usecase.GetCurrentUserIdUseCase
+import com.example.core_model.Group
 import com.example.core_ui.state.UiState
 import com.example.feature_conversation.domain.usecase.ChangeGroupAvatarUseCase
 import com.example.feature_conversation.domain.usecase.ChangeGroupNameUseCase
@@ -25,8 +27,9 @@ class ConversationOptionViewModel @Inject constructor(
     private val changeGroupAvatarUseCase: ChangeGroupAvatarUseCase,
     private val changeGroupNameUseCase: ChangeGroupNameUseCase,
     private val pinConversationUseCase: PinConversationUseCase,
-    private val unpinConversationUseCase: UnpinConversationUseCase
-): ViewModel() {
+    private val unpinConversationUseCase: UnpinConversationUseCase,
+    private val getCurrentUserIdUseCase: GetCurrentUserIdUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState<ConversationOptionUiState>>(
         UiState.Loading
     )
@@ -36,6 +39,11 @@ class ConversationOptionViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     fun loadConversation(conversationId: String) {
+        val currentUserId = getCurrentUserIdUseCase()
+            .getOrElse {
+                _uiState.value = UiState.Error
+                return
+            }
         viewModelScope.launch {
             observeConversationByIdUseCase(conversationId)
                 .catch {
@@ -44,7 +52,8 @@ class ConversationOptionViewModel @Inject constructor(
                 .collect { data ->
                     _uiState.value = UiState.Success(
                         ConversationOptionUiState(
-                            conversationDetailData = data
+                            conversationDetailData = data,
+                            currentUserId = currentUserId
                         )
                     )
                 }
@@ -64,11 +73,11 @@ class ConversationOptionViewModel @Inject constructor(
     }
 
     fun changeGroupName(
-        groupId: String,
+        group: Group,
         groupName: String
     ) {
         viewModelScope.launch {
-            changeGroupNameUseCase(groupId, groupName)
+            changeGroupNameUseCase(group, groupName)
                 .onFailure {
                     _event.emit(ConversationOptionEvent.ShowError)
                 }

@@ -23,7 +23,7 @@ fun Timestamp.toRelativeString(): String {
 
     return when {
         diffSeconds < 60 -> "Vừa xong"
-        diffMinutes < 60 -> "$diffMinutes phút trước"
+        diffMinutes < 60 -> "$diffMinutes phút"
         isSameDay -> SimpleDateFormat("HH:mm", Locale.getDefault()).format(toDate())
         isYesterday -> "Hôm qua"
         diffHours < 24 * 7 -> SimpleDateFormat("EEEE", Locale("vi")).format(toDate()) // Thứ Hai, Thứ Ba...

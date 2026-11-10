@@ -8,11 +8,12 @@ fun ConversationOptionRoute(
     conversationId: String,
     onBack: () -> Unit,
     onCreateGroup: (String) -> Unit,
-    onViewGroupMember: (String) -> Unit
+    onViewMember: (String) -> Unit
 ) {
     ConversationOptionScreen(
         conversationId = conversationId,
         onBack = onBack,
-        onCreateGroup = onCreateGroup
+        onCreateGroup = onCreateGroup,
+        onViewMember = onViewMember
     )
 }

@@ -97,7 +97,7 @@ fun ConversationScreen(
                         vertical = AppDimens.Space.Md
                     )
                 ) {
-                    stickyHeader {
+                    item {
                         Column {
                             ConversationSearchBar()
 //                            Spacer(modifier = Modifier.height(AppDimens.Space.Sm))
@@ -164,9 +164,7 @@ fun ConversationScreen(
 //                                }
 //                            }
                         }
-                    }
 
-                    item {
                         if(conversationWithInfos.any { it.isOnline }) {
                             Spacer(modifier = Modifier.height(AppDimens.Space.Md))
                         }
@@ -249,24 +247,28 @@ fun ConversationScreen(
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(AppDimens.Space.Md))
+                        Spacer(
+                            modifier = Modifier.height(
+                                AppDimens.Space.Xs + AppDimens.Space.Xxs
+                            )
+                        )
                     }
 
                     items(
                         count = conversationWithInfos.size,
                         key = { index -> conversationWithInfos[index].conversation.id }
                     ) { index ->
+                        Spacer(
+                            modifier = Modifier.height(
+                                AppDimens.Space.Xs + AppDimens.Space.Xxs
+                            )
+                        )
                         ConversationItem(
                             currentUserId = data.currentUserId,
                             conversationWithInfo = conversationWithInfos[index],
                             onClick = { conversationId ->
                                 onNavigationToConversationDetail(conversationId)
                             }
-                        )
-                        Spacer(
-                            modifier = Modifier.height(
-                                AppDimens.Space.Xs + AppDimens.Space.Xxs
-                            )
                         )
                     }
                 }

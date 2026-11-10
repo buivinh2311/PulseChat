@@ -29,9 +29,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import com.example.core_model.Conversation
+import com.example.core_model.Message
 import com.example.core_model.composite.ConversationDisplayInfo
 import com.example.core_model.composite.ConversationWithInfo
 import com.example.core_model.enum.ConversationType
+import com.example.core_model.enum.MessageType
+import com.example.core_model.enum.SystemMessageType
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
@@ -86,7 +90,7 @@ fun ConversationItem(
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .size(AppDimens.Icon.Xs)
+                            .size(AppDimens.Icon.Es)
                             .clip(shape = CircleShape)
                             .background(color = Color(0xFF31A24C))
                             .border(
@@ -138,32 +142,34 @@ fun ConversationItem(
                     }
                 }
 
-                conversation.lastMessage?.let {
+                conversation.lastMessageType?.let {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (conversation.lastMessageActorId == currentUserId) {
-                                if(conversation.systemMessage) {
-                                    stringResource(
-                                        R.string.text_my_last_system_message,
-                                        it
-                                    )
-                                } else {
-                                    stringResource(
-                                        R.string.text_my_last_message,
-                                        it
-                                    )
+                            text = when(conversation.lastMessageType) {
+                                MessageType.SYSTEM -> {
+                                    if (currentUserId == conversation.lastMessageActorId) {
+                                        stringResource(
+                                            R.string.text_my_last_system_message,
+                                            getLastMessagePreview(conversation)
+                                        )
+                                    } else {
+                                        "${conversation.lastMessageActorName} " +
+                                                getLastMessagePreview(conversation)
+                                    }
                                 }
-                            } else {
-                                if(conversation.systemMessage) {
-                                    "${conversation.lastMessageActorName} $it"
-                                } else {
-                                    when (conversation.type) {
-                                        ConversationType.DIRECT -> it
-                                        ConversationType.GROUP
-                                            -> "${conversation.lastMessageActorName}: $it"
+
+                                else -> {
+                                    if (currentUserId == conversation.lastMessageActorId) {
+                                        stringResource(
+                                            R.string.text_my_last_message,
+                                            getLastMessagePreview(conversation)
+                                        )
+                                    } else {
+                                        "${conversation.lastMessageActorName}: " +
+                                                getLastMessagePreview(conversation)
                                     }
                                 }
                             },
@@ -191,5 +197,44 @@ fun ConversationItem(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun getLastMessagePreview(
+    conversation: Conversation
+): String {
+    return when (conversation.lastMessageType) {
+        MessageType.TEXT, MessageType.FILE -> conversation.lastMessageText.orEmpty()
+        MessageType.IMAGE -> stringResource(R.string.text_image)
+        MessageType.VIDEO -> stringResource(R.string.text_video)
+        MessageType.SYSTEM -> {
+            when (conversation.systemMessageType) {
+                SystemMessageType.CREATE_GROUP
+                    -> stringResource(R.string.text_system_create_group)
+
+                SystemMessageType.CHANGE_GROUP_NAME
+                    -> stringResource(
+                    R.string.text_system_change_group_name,
+                    conversation.lastMessageText.orEmpty()
+                )
+
+                SystemMessageType.ADD_GROUP_MEMBER
+                    -> stringResource(
+                    R.string.text_system_add_group_member,
+                    conversation.lastMessageText.orEmpty()
+                )
+
+                SystemMessageType.PIN_MESSAGE
+                    -> stringResource(R.string.text_system_pin_message)
+
+                SystemMessageType.UNPIN_MESSAGE
+                    -> stringResource(R.string.text_system_unpin_message)
+
+                else -> ""
+            }
+        }
+
+        else -> ""
     }
 }

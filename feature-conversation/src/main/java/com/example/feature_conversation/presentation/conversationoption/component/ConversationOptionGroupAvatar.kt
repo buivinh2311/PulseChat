@@ -51,8 +51,9 @@ fun ConversationOptionGroupAvatar(
     modifier: Modifier = Modifier,
     context: Context,
     group: Group,
+    currentUserId: String,
     onChangeGroupAvatar: (File) -> Unit,
-    onChangeGroupName: (String, String) -> Unit
+    onChangeGroupName: (Group, String) -> Unit
 ) {
     var showChangeGroupNameDialog by remember {
         mutableStateOf(false)
@@ -133,8 +134,12 @@ fun ConversationOptionGroupAvatar(
             Spacer(modifier = Modifier.height(AppDimens.Space.Md))
 
             Row(
-                modifier = Modifier.clickable {
-                    showChangeGroupNameDialog = true
+                modifier = if(currentUserId == group.leaderId) {
+                    Modifier.clickable {
+                        showChangeGroupNameDialog = true
+                    }
+                } else {
+                    Modifier
                 },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -145,13 +150,15 @@ fun ConversationOptionGroupAvatar(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.width(AppDimens.Space.Xs))
 
-                Icon(
-                    painter = AppIcons.Edit,
-                    contentDescription = "change group name",
-                    modifier = Modifier.size(AppDimens.Icon.Xxs)
-                )
+                if(currentUserId == group.leaderId) {
+                    Spacer(modifier = Modifier.width(AppDimens.Space.Xs))
+                    Icon(
+                        painter = AppIcons.Edit,
+                        contentDescription = "change group name",
+                        modifier = Modifier.size(AppDimens.Icon.Xxs)
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(AppDimens.Space.Lg))
 
@@ -201,7 +208,7 @@ fun ConversationOptionGroupAvatar(
                 showChangeGroupNameDialog = false
             },
             onChange = { groupName ->
-                onChangeGroupName(group.id, groupName)
+                onChangeGroupName(group, groupName)
                 showChangeGroupNameDialog = false
             }
         )

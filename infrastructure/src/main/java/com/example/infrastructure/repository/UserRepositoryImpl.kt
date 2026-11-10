@@ -6,6 +6,7 @@ import com.example.core_model.enum.Gender
 import com.example.core_model.User
 import com.example.core_model.enum.UserStatus
 import com.example.core_network.dto.UserDto
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
 import com.example.infrastructure.mapper.remote.toDto
 import com.google.firebase.Timestamp
@@ -25,14 +26,10 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : UserRepository {
-    private companion object {
-        const val USERS = "users"
-    }
-
     override suspend fun createUser(user: User): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(user.id)
                 .set(user.toDto())
                 .await()
@@ -44,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun observerUserById(uid: String): Flow<User?> = callbackFlow {
         val listener = firestore
-            .collection(USERS)
+            .collection(FirestoreCollectionsUtil.USERS)
             .document(uid)
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
@@ -65,7 +62,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getUserById(uid: String): Result<User?> {
         return try {
             val user = firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .get()
                 .await()
@@ -79,7 +76,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun observeUsersByIds(ids: List<String>): Flow<List<User>> = callbackFlow {
         val listener = firestore
-            .collection(USERS)
+            .collection(FirestoreCollectionsUtil.USERS)
             .whereIn(FieldPath.documentId(), ids)
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
@@ -108,7 +105,7 @@ class UserRepositoryImpl @Inject constructor(
                 return Result.success(emptyList())
             }
             val users = firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .whereIn(FieldPath.documentId(), ids)
                 .get()
                 .await()
@@ -131,7 +128,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .update(
                     mapOf(
@@ -154,7 +151,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .update("avatarUrl", imageUrl)
                 .await()
@@ -170,7 +167,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .update("coverPhotoUrl", imageUrl)
                 .await()
@@ -189,7 +186,7 @@ class UserRepositoryImpl @Inject constructor(
 
             val firstNameDeferred = async {
                 firestore
-                    .collection(USERS)
+                    .collection(FirestoreCollectionsUtil.USERS)
                     .whereGreaterThanOrEqualTo("firstName", key)
                     .whereLessThanOrEqualTo("firstName", key + "\uf8ff")
                     .get()
@@ -198,7 +195,7 @@ class UserRepositoryImpl @Inject constructor(
 
             val lastNameDeferred = async {
                 firestore
-                    .collection(USERS)
+                    .collection(FirestoreCollectionsUtil.USERS)
                     .whereGreaterThanOrEqualTo("lastName", key)
                     .whereLessThanOrEqualTo("lastName", key + "\uf8ff")
                     .get()
@@ -226,7 +223,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .update(
                     mapOf(
@@ -243,7 +240,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateFcmToken(uid: String, fcmToken: String): Result<Unit> {
         return try {
             firestore
-                .collection(USERS)
+                .collection(FirestoreCollectionsUtil.USERS)
                 .document(uid)
                 .update(
                     "fcmTokens",

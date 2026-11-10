@@ -28,5 +28,6 @@ data class MessageDto(
     val pinnedAt: Timestamp? = null,
     val readBy: List<String> = emptyList(),
     val systemMessageType: String? = null,
-    val targetMessageId: String? = null
+    val targetMessageId: String? = null,
+    val targetUserId: String? = null
 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +28,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
@@ -44,48 +48,50 @@ fun ConversationSearchBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = AppDimens.Space.Md)
-            .height(AppDimens.Layout.SearchBarHeight)
             .clip(RoundedCornerShape(AppDimens.Radius.Lg))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = AppDimens.Space.Lg),
+            .background(MaterialTheme.colorScheme.secondary)
+            .padding(AppDimens.Space.Md),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = AppIcons.Search,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondary,
-            modifier = Modifier.size(AppDimens.Icon.Md)
+            tint = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
         )
-        Spacer(modifier = Modifier.width(AppDimens.Space.Md))
+        Spacer(modifier = Modifier.width(AppDimens.Space.Sm))
 
         BasicTextField(
             value = keyword,
             onValueChange = {
                 keyword = it
-//                onSearch(keyword)
+//                onSearch(it)
             },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences
+            ),
             singleLine = true,
-            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+            textStyle = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondary,
+                textAlign = TextAlign.Start
             ),
-            cursorBrush = SolidColor(
-                MaterialTheme.colorScheme.primary
-            ),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .weight(1f)
                 .height(AppDimens.Space.Xl)
                 .focusRequester(focusRequester),
             decorationBox = { innerTextField ->
-                Box {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
                     if (keyword.isEmpty()) {
                         Text(
                             text = stringResource(R.string.hint_search_conversation),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSecondary
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondary.copy(
+                                alpha = 0.7f
+                            )
                         )
                     }
                     innerTextField()

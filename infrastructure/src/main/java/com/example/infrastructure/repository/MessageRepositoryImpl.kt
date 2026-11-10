@@ -1,18 +1,12 @@
 package com.example.infrastructure.repository
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.ui.res.stringResource
 import com.example.core_domain.repository.MessageRepository
 import com.example.core_model.Message
-import com.example.core_model.ReplyPreview
-import com.example.core_model.enum.SystemMessageType
 import com.example.core_network.dto.MessageDto
-import com.example.core_resource.R
+import com.example.core_utils.FirestoreCollectionsUtil
 import com.example.infrastructure.mapper.remote.toDomain
-import com.example.infrastructure.mapper.remote.toDto
-import com.example.infrastructure.mapper.remote.toFirestoreMap
-import com.google.android.gms.common.util.CollectionUtils.mapOf
+import com.example.infrastructure.util.addMessageAndUpdateConversation
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,19 +23,12 @@ import kotlin.collections.mapOf
 import kotlin.collections.mutableMapOf
 
 class MessageRepositoryImpl @Inject constructor(
-    @param:ApplicationContext private val context: Context,
     private val firestore: FirebaseFirestore
 ) : MessageRepository {
-
-    private companion object {
-        const val CONVERSATIONS = "conversations"
-        const val MESSAGES = "messages"
-    }
-
     private fun messagesRef(conversationId: String) = firestore
-        .collection(CONVERSATIONS)
+        .collection(FirestoreCollectionsUtil.CONVERSATIONS)
         .document(conversationId)
-        .collection(MESSAGES)
+        .collection(FirestoreCollectionsUtil.MESSAGES)
 
     override fun observeMessagesByConversationId(
         conversationId: String,
@@ -107,43 +94,25 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun sendMessage(
         senderName: String,
-        message: Message
+        message: Message,
+        targetUserName: String?
     ): Result<Unit> {
         return try {
             val conversationRef = firestore
-                .collection(CONVERSATIONS)
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
                 .document(message.conversationId)
 
             val messageRef = conversationRef
-                .collection(MESSAGES)
+                .collection(FirestoreCollectionsUtil.MESSAGES)
                 .document()
 
             firestore.runBatch { batch ->
-                batch.set(
-                    messageRef,
-                    message.toDto(messageRef.id).toFirestoreMap()
-                )
-                batch.update(
-                    conversationRef,
-                    mapOf(
-                        "lastMessageActorId" to message.senderId,
-                        "lastMessageActorName" to senderName,
-                        "lastMessage" to when (message) {
-                            is Message.Text -> message.text
-                            is Message.Image -> context.getString(R.string.text_image)
-                            is Message.Video -> context.getString(R.string.text_video)
-                            is Message.File -> message.fileName
-                            is Message.System -> when (message.systemMessageType) {
-                                SystemMessageType.PIN_MESSAGE
-                                    -> context.getString(R.string.text_system_pin_message)
-
-                                SystemMessageType.UNPIN_MESSAGE
-                                    -> context.getString(R.string.text_system_unpin_message)
-                            }
-                        },
-                        "lastMessageTime" to message.createdAt,
-                        "systemMessage" to (message is Message.System)
-                    )
+                batch.addMessageAndUpdateConversation(
+                    conversationRef = conversationRef,
+                    messageRef = messageRef,
+                    message = message,
+                    actorUserName = senderName,
+                    targetUserName = targetUserName
                 )
             }.await()
             Result.success(Unit)

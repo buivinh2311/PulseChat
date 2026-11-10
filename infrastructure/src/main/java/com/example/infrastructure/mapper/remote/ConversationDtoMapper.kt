@@ -13,9 +13,10 @@ fun ConversationDto.toDomain(): Conversation {
         participants = participants,
         lastMessageActorId = lastMessageActorId,
         lastMessageActorName = lastMessageActorName,
-        lastMessage = lastMessage,
+        lastMessageText = lastMessageText,
         lastMessageTime = lastMessageTime,
-        systemMessage = systemMessage,
+        lastMessageType = lastMessageType,
+        systemMessageType = systemMessageType,
         pinnedAt = pinnedAt,
         createdAt = createdAt
     )
@@ -28,9 +29,10 @@ fun Conversation.toDto(): ConversationDto {
         participants = participants,
         lastMessageActorId = lastMessageActorId,
         lastMessageActorName = lastMessageActorName,
-        lastMessage = lastMessage,
+        lastMessageText = lastMessageText,
         lastMessageTime = lastMessageTime,
-        systemMessage = systemMessage,
+        lastMessageType = lastMessageType,
+        systemMessageType = systemMessageType,
         pinnedAt = pinnedAt,
         createdAt = createdAt
     )

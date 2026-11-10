@@ -272,19 +272,20 @@ fun ConversationDetailContent(
                     is Message.System -> {
                         SystemMessageItem(
                             isMine = message.senderId == currentUser.id,
-                            senderName = sender?.fullName
+                            actorUserName = sender?.fullName
                                 ?: stringResource(R.string.text_unknown_user),
                             systemMessage = message,
-                            onView = {
-                                when (message.systemMessageType) {
-                                    SystemMessageType.PIN_MESSAGE,
-                                    SystemMessageType.UNPIN_MESSAGE -> {
-                                        message.targetMessageId?.let { targetId ->
-                                            scrollToMessage(targetId)
-                                        }
+                            onView = when (message.systemMessageType) {
+                                SystemMessageType.PIN_MESSAGE,
+                                SystemMessageType.UNPIN_MESSAGE -> {
+                                    message.targetMessageId?.let { targetId ->
+                                        { scrollToMessage(targetId) }
                                     }
                                 }
+
+                                else -> null
                             }
+
                         )
                     }
                 }

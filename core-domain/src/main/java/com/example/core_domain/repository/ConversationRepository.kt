@@ -16,11 +16,6 @@ interface ConversationRepository {
 
     suspend fun ensureConversation(user1: FirebaseUser, user2: User): Result<String>
 
-    suspend fun createConversation(
-        currentUser: FirebaseUser,
-        otherUser: List<User>
-    ): Result<String>
-
     fun getConversationIdByFriendship(
         currentUserId: String,
         friendId: String

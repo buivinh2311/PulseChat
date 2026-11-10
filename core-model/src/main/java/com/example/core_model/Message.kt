@@ -92,6 +92,8 @@ sealed class Message {
         override val createdAt: Timestamp,
         override val reactions: Map<String, String> = emptyMap(),
         val systemMessageType: SystemMessageType,
-        val targetMessageId: String? = null
+        val text: String? = null,
+        val targetMessageId: String? = null,
+        val targetUserId: String? = null
     ) : Message()
 }
