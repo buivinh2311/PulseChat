@@ -15,8 +15,7 @@ fun WriteBatch.addMessageAndUpdateConversation(
     conversationRef: DocumentReference,
     messageRef: DocumentReference,
     message: Message,
-    actorUserName: String,
-    targetUserName: String? = null
+    actorUserName: String
 ) {
     val messageDto = message.toDto(messageRef.id)
     set(messageRef, messageDto.toFirestoreMap())

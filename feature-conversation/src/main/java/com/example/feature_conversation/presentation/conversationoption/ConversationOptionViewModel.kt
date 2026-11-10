@@ -61,11 +61,11 @@ class ConversationOptionViewModel @Inject constructor(
     }
 
     fun changeGroupAvatar(
-        groupId: String,
+        group: Group,
         file: File
     ) {
         viewModelScope.launch {
-            changeGroupAvatarUseCase(groupId, file)
+            changeGroupAvatarUseCase(group, file)
                 .onFailure {
                     _event.emit(ConversationOptionEvent.ShowError)
                 }

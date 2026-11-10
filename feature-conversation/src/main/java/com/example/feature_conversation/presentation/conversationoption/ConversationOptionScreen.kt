@@ -161,7 +161,10 @@ fun ConversationOptionScreen(
                                         context = context,
                                         group = data.group,
                                         currentUserId = conversationOptionUiState.currentUserId,
-                                        onChangeGroupAvatar = { },
+                                        onChangeGroupAvatar = { group, avatarFile ->
+                                            conversationOptionViewModel
+                                                .changeGroupAvatar(group, avatarFile)
+                                        },
                                         onChangeGroupName = { group, groupName ->
                                             conversationOptionViewModel
                                                 .changeGroupName(group, groupName)

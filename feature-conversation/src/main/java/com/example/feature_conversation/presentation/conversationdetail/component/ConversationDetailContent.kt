@@ -129,8 +129,20 @@ fun ConversationDetailContent(
                             is ConversationDetailData.Group -> data.group.avatarUrl
                         },
                         contentDescription = null,
-                        placeholder = painterResource(R.drawable.account),
-                        error = painterResource(R.drawable.account),
+                        placeholder = when (data) {
+                            is ConversationDetailData.Direct
+                                -> painterResource(R.drawable.account)
+
+                            is ConversationDetailData.Group
+                                -> painterResource(R.drawable.group)
+                        },
+                        error = when (data) {
+                            is ConversationDetailData.Direct
+                                -> painterResource(R.drawable.account)
+
+                            is ConversationDetailData.Group
+                                -> painterResource(R.drawable.group)
+                        },
                         modifier = Modifier
                             .fillMaxWidth(0.3f)
                             .aspectRatio(1f)

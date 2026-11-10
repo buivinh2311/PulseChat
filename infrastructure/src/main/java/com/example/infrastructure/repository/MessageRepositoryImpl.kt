@@ -111,8 +111,7 @@ class MessageRepositoryImpl @Inject constructor(
                     conversationRef = conversationRef,
                     messageRef = messageRef,
                     message = message,
-                    actorUserName = senderName,
-                    targetUserName = targetUserName
+                    actorUserName = senderName
                 )
             }.await()
             Result.success(Unit)

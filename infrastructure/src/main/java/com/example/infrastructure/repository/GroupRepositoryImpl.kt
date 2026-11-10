@@ -78,8 +78,7 @@ class GroupRepositoryImpl @Inject constructor(
                         conversationRef = conversationRef,
                         messageRef = messageRef,
                         message = systemMessage,
-                        actorUserName = actorUserName,
-                        targetUserName = member.fullName
+                        actorUserName = actorUserName
                     )
                 }
             }.await()
@@ -149,15 +148,33 @@ class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun changeAvatar(
-        groupId: String,
-        avatarUrl: String
+        group: Group,
+        avatarUrl: String,
+        systemMessage: Message.System,
+        actorUserName: String
     ): Result<Unit> {
         return try {
-            firestore
+            val groupRef = firestore
                 .collection(FirestoreCollectionsUtil.GROUPS)
-                .document(groupId)
-                .update("avatarUrl", avatarUrl)
-                .await()
+                .document(group.id)
+
+            val conversationRef = firestore
+                .collection(FirestoreCollectionsUtil.CONVERSATIONS)
+                .document(group.conversationId)
+
+            val messageRef = conversationRef
+                .collection(FirestoreCollectionsUtil.MESSAGES)
+                .document()
+
+            firestore.runBatch { batch ->
+                batch.update(groupRef, "avatarUrl", avatarUrl)
+                batch.addMessageAndUpdateConversation(
+                    conversationRef = conversationRef,
+                    messageRef = messageRef,
+                    message = systemMessage,
+                    actorUserName = actorUserName
+                )
+            }.await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

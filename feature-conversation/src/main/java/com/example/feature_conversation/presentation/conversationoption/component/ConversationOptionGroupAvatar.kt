@@ -52,7 +52,7 @@ fun ConversationOptionGroupAvatar(
     context: Context,
     group: Group,
     currentUserId: String,
-    onChangeGroupAvatar: (File) -> Unit,
+    onChangeGroupAvatar: (Group, File) -> Unit,
     onChangeGroupName: (Group, String) -> Unit
 ) {
     var showChangeGroupNameDialog by remember {
@@ -64,7 +64,7 @@ fun ConversationOptionGroupAvatar(
     ) { uri ->
         if (uri != null) {
             val file = ImageUtil.uriToFile(context, uri)
-            onChangeGroupAvatar(file)
+            onChangeGroupAvatar(group, file)
         }
     }
 
@@ -91,8 +91,8 @@ fun ConversationOptionGroupAvatar(
                 AsyncImage(
                     model = group.avatarUrl,
                     contentDescription = null,
-                    placeholder = painterResource(R.drawable.account),
-                    error = painterResource(R.drawable.account),
+                    placeholder = painterResource(R.drawable.group),
+                    error = painterResource(R.drawable.group),
                     modifier = Modifier
                         .size(AppDimens.ImageSize.Xxl)
                         .aspectRatio(1f)
@@ -102,33 +102,41 @@ fun ConversationOptionGroupAvatar(
                             color = MaterialTheme.colorScheme.primary,
                             shape = CircleShape
                         )
-                        .clickable {
-                            launcher.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                                )
-                            )
-                        },
+                        .then(
+                            if(currentUserId == group.leaderId) {
+                                Modifier.clickable {
+                                    launcher.launch(
+                                        PickVisualMediaRequest(
+                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        )
+                                    )
+                                }
+                            } else {
+                                Modifier
+                            }
+                        ),
                     contentScale = ContentScale.Crop
                 )
 
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(AppDimens.Layout.IconButtonSize)
-                        .background(
-                            MaterialTheme.colorScheme.primary,
-                            shape = CircleShape
-                        )
-                ) {
-                    Icon(
-                        painter = AppIcons.Camera,
-                        contentDescription = null,
+                if(currentUserId == group.leaderId) {
+                    Box(
                         modifier = Modifier
-                            .size(AppDimens.Icon.Sm)
-                            .align(Alignment.Center),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
+                            .align(Alignment.BottomEnd)
+                            .size(AppDimens.Layout.IconButtonSize)
+                            .background(
+                                MaterialTheme.colorScheme.primary,
+                                shape = CircleShape
+                            )
+                    ) {
+                        Icon(
+                            painter = AppIcons.Camera,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(AppDimens.Icon.Sm)
+                                .align(Alignment.Center),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(AppDimens.Space.Md))

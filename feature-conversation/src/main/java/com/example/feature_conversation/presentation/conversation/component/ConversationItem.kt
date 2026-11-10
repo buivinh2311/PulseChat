@@ -40,6 +40,7 @@ import com.example.core_resource.AppDimens
 import com.example.core_resource.AppIcons
 import com.example.core_resource.R
 import com.example.core_utils.toRelativeString
+import com.example.feature_conversation.presentation.conversationdetail.ConversationDetailData
 
 @Composable
 fun ConversationItem(
@@ -78,8 +79,20 @@ fun ConversationItem(
                         is ConversationDisplayInfo.Group -> displayInfo.group.avatarUrl
                     },
                     contentDescription = null,
-                    placeholder = painterResource(R.drawable.account),
-                    error = painterResource(R.drawable.account),
+                    placeholder = when (displayInfo) {
+                        is ConversationDisplayInfo.Direct
+                            -> painterResource(R.drawable.account)
+
+                        is ConversationDisplayInfo.Group
+                            -> painterResource(R.drawable.group)
+                    },
+                    error = when (displayInfo) {
+                        is ConversationDisplayInfo.Direct
+                            -> painterResource(R.drawable.account)
+
+                        is ConversationDisplayInfo.Group
+                            -> painterResource(R.drawable.group)
+                    },
                     modifier = Modifier
                         .size(AppDimens.ImageSize.Sm)
                         .clip(shape = CircleShape),
@@ -201,7 +214,7 @@ fun ConversationItem(
 }
 
 @Composable
-fun getLastMessagePreview(
+private fun getLastMessagePreview(
     conversation: Conversation
 ): String {
     return when (conversation.lastMessageType) {

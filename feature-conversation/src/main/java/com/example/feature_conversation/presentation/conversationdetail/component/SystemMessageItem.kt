@@ -66,6 +66,7 @@ fun SystemMessageItem(
         ) {
             Icon(
                 painter = when (systemMessage.systemMessageType) {
+                    SystemMessageType.CHANGE_GROUP_AVATAR -> AppIcons.Camera
                     SystemMessageType.CHANGE_GROUP_NAME -> AppIcons.Edit
                     SystemMessageType.PIN_MESSAGE -> AppIcons.Pin
                     SystemMessageType.UNPIN_MESSAGE -> AppIcons.Unpin
@@ -80,65 +81,12 @@ fun SystemMessageItem(
 
             Text(
                 text = if (isMine) {
-                    when (systemMessage.systemMessageType) {
-                        SystemMessageType.CHANGE_GROUP_NAME
-                            -> stringResource(
-                            R.string.text_my_last_system_message,
-                            stringResource(
-                                R.string.text_system_change_group_name,
-                                systemMessage.text.orEmpty()
-                            )
-                        )
-
-                        SystemMessageType.PIN_MESSAGE
-                            -> stringResource(
-                            R.string.text_my_last_system_message,
-                            stringResource(R.string.text_system_pin_message)
-                        )
-
-                        SystemMessageType.UNPIN_MESSAGE
-                            -> stringResource(
-                            R.string.text_my_last_system_message,
-                            stringResource(R.string.text_system_unpin_message)
-                        )
-
-                        SystemMessageType.CREATE_GROUP
-                            -> stringResource(
-                            R.string.text_my_last_system_message,
-                            stringResource(R.string.text_system_create_group)
-                        )
-
-                        SystemMessageType.ADD_GROUP_MEMBER
-                            -> stringResource(
-                            R.string.text_my_last_system_message,
-                            stringResource(
-                                R.string.text_system_add_group_member,
-                                systemMessage.text.orEmpty()
-                            )
-                        )
-                    }
+                    stringResource(
+                    R.string.text_my_last_system_message,
+                        getSystemMessageContent(systemMessage)
+                    )
                 } else {
-                    when (systemMessage.systemMessageType) {
-                        SystemMessageType.CHANGE_GROUP_NAME -> "$actorUserName " + stringResource(
-                            R.string.text_system_change_group_name,
-                            systemMessage.text.orEmpty()
-                        )
-
-                        SystemMessageType.PIN_MESSAGE -> "$actorUserName " +
-                                stringResource(R.string.text_system_pin_message)
-
-                        SystemMessageType.UNPIN_MESSAGE -> "$actorUserName " +
-                                stringResource(R.string.text_system_unpin_message)
-
-                        SystemMessageType.CREATE_GROUP -> "$actorUserName " +
-                                stringResource(R.string.text_system_create_group)
-
-                        SystemMessageType.ADD_GROUP_MEMBER
-                            -> "$actorUserName " + stringResource(
-                            R.string.text_system_add_group_member,
-                            systemMessage.text.orEmpty()
-                        )
-                    }
+                    "$actorUserName " + getSystemMessageContent(systemMessage)
                 },
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
@@ -157,5 +105,36 @@ fun SystemMessageItem(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun getSystemMessageContent(
+    systemMessage: Message.System
+): String {
+    return when (systemMessage.systemMessageType) {
+        SystemMessageType.CHANGE_GROUP_AVATAR
+            -> stringResource(R.string.text_system_change_group_avatar)
+
+        SystemMessageType.CHANGE_GROUP_NAME
+            -> stringResource(
+            R.string.text_system_change_group_name,
+            systemMessage.text.orEmpty()
+        )
+
+        SystemMessageType.PIN_MESSAGE
+            -> stringResource(R.string.text_system_pin_message)
+
+        SystemMessageType.UNPIN_MESSAGE
+            -> stringResource(R.string.text_system_unpin_message)
+
+        SystemMessageType.CREATE_GROUP
+            -> stringResource(R.string.text_system_create_group)
+
+        SystemMessageType.ADD_GROUP_MEMBER
+            -> stringResource(
+            R.string.text_system_add_group_member,
+            systemMessage.text.orEmpty()
+        )
     }
 }

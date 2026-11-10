@@ -31,6 +31,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -92,8 +93,20 @@ fun ConversationDetailTopBar(
                         -> conversationDetailData.group.avatarUrl
                 },
                 contentDescription = null,
-                placeholder = painterResource(R.drawable.account),
-                error = painterResource(R.drawable.account),
+                placeholder = when (conversationDetailData) {
+                    is ConversationDetailData.Direct
+                        -> painterResource(R.drawable.account)
+
+                    is ConversationDetailData.Group
+                        -> painterResource(R.drawable.group)
+                },
+                error = when (conversationDetailData) {
+                    is ConversationDetailData.Direct
+                        -> painterResource(R.drawable.account)
+
+                    is ConversationDetailData.Group
+                        -> painterResource(R.drawable.group)
+                },
                 modifier = Modifier
                     .size(AppDimens.ImageSize.Xs)
                     .clip(shape = CircleShape),
