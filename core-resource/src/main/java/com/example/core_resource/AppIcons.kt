@@ -68,6 +68,10 @@ object AppIcons {
         @Composable
         get() = painterResource(R.drawable.ic_conversation)
 
+    val Copy
+        @Composable
+        get() = painterResource(R.drawable.ic_copy)
+
     val CreateGroup
         @Composable
         get() = painterResource(R.drawable.ic_create_group)

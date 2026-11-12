@@ -57,7 +57,7 @@ fun ConversationOptionGroupInfo(
                 iconColor = MaterialTheme.colorScheme.primary,
                 onNavigate = {
                     onConversationGroupOptionAction(
-                        ConversationGroupOptionAction.VIEW_MEMBER
+                        ConversationGroupOptionAction.GROUP_MEMBER
                     )
                 }
             )
@@ -83,7 +83,11 @@ fun ConversationOptionGroupInfo(
                 text = stringResource(R.string.description_group_link),
                 icon = AppIcons.Link,
                 iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                onNavigate = { }
+                onNavigate = {
+                    onConversationGroupOptionAction(
+                        ConversationGroupOptionAction.GROUP_LINK
+                    )
+                }
             )
         }
     }

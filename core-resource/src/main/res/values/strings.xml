@@ -250,4 +250,8 @@
     <string name="text_system_add_group_member">đã thêm %s vào nhóm</string>
     <string name="text_system_change_group_name">đã đổi tên nhóm thành %s</string>
     <string name="text_system_change_group_avatar">đã thay đổi ảnh đại diện nhóm</string>
+    <string name="text_invite_link">Mời mọi người tham gia nhóm bằng mã QR hoặc link bên dưới</string>
+    <string name="label_save_qr_code">Lưu mã QR</string>
+    <string name="label_share_link">Chia sẻ link</string>
+    <string name="label_copy_link">Sao chép link</string>
 </resources>

@@ -9,8 +9,8 @@ enum class ConversationGroupOptionAction {
     CREATE_VOTE,
     PIN,
     UNPIN,
-    VIEW_MEMBER,
-    VIEW_GROUP_LINK,
+    GROUP_MEMBER,
+    GROUP_LINK,
     DELETE_CHAT_HISTORY,
     LEAVE_THE_GROUP
 }

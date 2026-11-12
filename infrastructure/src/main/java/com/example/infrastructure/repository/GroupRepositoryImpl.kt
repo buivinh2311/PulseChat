@@ -48,7 +48,8 @@ class GroupRepositoryImpl @Inject constructor(
 
             val groupDto = group.copy(
                 id = groupRef.id,
-                conversationId = conversationRef.id
+                conversationId = conversationRef.id,
+                link = "https://zyra-728b7.web.app/group/${group.id}"
             ).toDto()
 
             firestore.runBatch { batch ->

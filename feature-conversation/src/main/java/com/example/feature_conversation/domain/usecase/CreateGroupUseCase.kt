@@ -66,6 +66,7 @@ class CreateGroupUseCase @Inject constructor(
             id = "",
             name = name,
             avatarUrl = avatarUrl,
+            link = "",
             conversationId = "",
             leaderId = currentUserId,
             createdAt = Timestamp.now()
